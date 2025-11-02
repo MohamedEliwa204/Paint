@@ -1,1 +1,52 @@
-<p>drawing-canvas works!</p>
+
+<svg id="canvas">
+  <circle
+    *ngIf="selectedShape === 'circle'"
+    r="45"
+    cx="50"
+    cy="50"
+    fill="red"
+    stroke="green"
+    stroke-width="3"
+    opacity="1"
+    style="cursor: grab;"
+  />
+  <rect
+    *ngIf="selectedShape === 'rectangle'"
+    width="300"
+    height="100"
+    x="10"
+    y="10"
+    style="fill:rgb(0,0,255);stroke-width:3;stroke:red;cursor:grab;"
+  />
+  <rect
+    *ngIf="selectedShape === 'square'"
+    width="200"
+    height="200"
+    x="10"
+    y="10"
+    style="fill:rgb(0,0,255);stroke-width:3;stroke:red;cursor:grab;"
+  />
+
+  <ellipse
+    *ngIf="selectedShape === 'ellipse'"
+    rx="100" ry="50" cx="120" cy="80"
+    style="fill:yellow;stroke:green;stroke-width:3;cursor:grab;"
+  />
+
+  <polygon *ngIf="selectedShape === 'triangle'"
+             points="100,20 40,180 160,180"
+             fill="orange"
+             stroke="black"
+             stroke-width="3"
+             style="cursor:grab;"
+  />
+
+  <line
+    *ngIf="selectedShape === 'line'"
+    x1="0" y1="0"
+    x2="300" y2="200"
+    style="stroke:red;stroke-width:2;cursor:grab;"
+  />
+
+</svg>

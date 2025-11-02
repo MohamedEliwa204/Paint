@@ -1,4 +1,5 @@
-import {Component, input} from '@angular/core';
+import {Component, inject, input, output} from '@angular/core';
+import {ShapeSelection} from '../../services/shape-selection';
 
 @Component({
   selector: 'app-shapes-bar',
@@ -7,15 +8,15 @@ import {Component, input} from '@angular/core';
   styleUrl: './shapes-bar.css',
 })
 export class ShapesBar {
-    shape = input<string>('');
-    selectedShape: string = '';
+  private shapeService = inject(ShapeSelection);
 
-    onClick(shapeName: string) {
-      this.selectedShape = shapeName;
-      console.log('Selected shape:', shapeName);
-    }
+  onClick(shapeName: string) {
 
-    isSelected(shapeName: string): boolean {
-      return this.selectedShape === shapeName;
-    }
+    this.shapeService.setSelectedShape(shapeName);
+    console.log('Selected shape:', shapeName);
+  }
+
+  isSelected(shapeName: string): boolean {
+    return this.shapeService.selectedShape() === shapeName;
+  }
 }

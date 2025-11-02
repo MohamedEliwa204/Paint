@@ -1,7 +1,44 @@
 <div>
-  <button (click)="onClick('circle')" [class.selected]="isSelected('circle')">&#9675;</button>
-  <button (click)="onClick('filled-square')" [class.selected]="isSelected('filled-square')">&#9645;</button>
-  <button (click)="onClick('square')" [class.selected]="isSelected('square')">&#9633;</button>
-  <button (click)="onClick('triangle')" [class.selected]="isSelected('triangle')">&#9651;</button>
-  <button (click)="onClick('line')" [class.selected]="isSelected('line')">&#9474;</button>
+
+  <button (click)="onClick('circle')" [class.selected]="isSelected('circle')" title="Circle">
+    <svg width="28" height="28" viewBox="0 0 28 28">
+      <circle cx="14" cy="14" r="12" fill="none" stroke="currentColor" stroke-width="2"/>
+    </svg>
+  </button>
+
+
+  <button (click)="onClick('ellipse')" [class.selected]="isSelected('ellipse')" title="Ellipse">
+    <svg width="28" height="28" viewBox="0 0 28 28">
+      <ellipse cx="14" cy="14" rx="12" ry="8" fill="none" stroke="currentColor" stroke-width="2"/>
+    </svg>
+  </button>
+
+
+  <button (click)="onClick('rectangle')" [class.selected]="isSelected('rectangle')" title="Rectangle">
+    <svg width="28" height="28" viewBox="0 0 28 28">
+      <rect x="3" y="7" width="22" height="14" fill="currentColor"/>
+    </svg>
+  </button>
+
+
+  <button (click)="onClick('square')" [class.selected]="isSelected('square')" title="Square">
+    <svg width="28" height="28" viewBox="0 0 28 28">
+      <rect x="4" y="4" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"/>
+    </svg>
+  </button>
+
+
+  <button (click)="onClick('triangle')" [class.selected]="isSelected('triangle')" title="Triangle">
+    <svg width="28" height="28" viewBox="0 0 28 28">
+      <polygon points="14,4 26,24 2,24" fill="currentColor"/>
+    </svg>
+  </button>
+
+
+  <button (click)="onClick('line')" [class.selected]="isSelected('line')" title="Line">
+    <svg width="28" height="28" viewBox="0 0 28 28">
+      <line x1="4" y1="24" x2="24" y2="4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+    </svg>
+  </button>
+
 </div>
