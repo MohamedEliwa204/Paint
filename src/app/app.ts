@@ -4,7 +4,7 @@ import {ShapesBar} from './components/shapes-bar/shapes-bar';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, ShapesBar],
+  imports: [ShapesBar],
   templateUrl: './app.html',
   styleUrl: './app.css'
 })
