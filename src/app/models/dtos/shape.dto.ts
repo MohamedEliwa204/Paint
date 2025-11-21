@@ -1,22 +1,22 @@
-export type ShapeType = 'rectangle' | 'ellipse' | 'svg' | 'triangle' | 'line' | 'square' |'circle';
-
+export type ShapeType = 'rectangle' | 'ellipse' | 'svg' | 'polygon' | 'line' | 'square' |'circle';
+export type ShapeStyles = {
+  stroke?: string,
+  strokeWidth?: number,
+  fill?: string,
+  opacity?: number,
+  strokeDashArray?: string,
+  strokeLinecap?: 'butt' | 'round' | 'square';
+  [key: string]: any
+}
 export interface ShapeDto {
   id: string;
-  type: ShapeType;
-
-
+  type: string;
+  shapeStyles: ShapeStyles;
   x: number;
   y: number;
   width: number;
   height: number;
   rotation?: number; // degrees
-
-  fill?: string;
-  stroke?: string;
-  strokeWidth?: number;
-  opacity?: number;
-  strokeDasharray?: string;
-  strokeLinecap?: 'butt' | 'round' | 'square';
 
   isSelected?: boolean;
   metadata?: Record<string, unknown>;

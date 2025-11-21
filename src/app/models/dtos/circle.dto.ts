@@ -1,10 +1,7 @@
 
-import { ShapeDto } from './shape.dto';
+import { EllipseDto } from './ellipse.dto';
 
-export interface CircleDto extends ShapeDto {
+export interface CircleDto extends EllipseDto {
   type: 'circle';
-
-  cx?: number;
-  cy?: number;
   r?: number;
 }

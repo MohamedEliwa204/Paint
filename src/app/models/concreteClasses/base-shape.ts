@@ -1,9 +1,10 @@
 import {ShapeDto, ShapeType} from '../dtos/shape.dto';
+import {ShapeJSON, ShapeStyles} from '../Shape';
 
 export abstract class BaseShape implements ShapeDto {
 
   id: string;
-  type: ShapeType;
+  type: string;
 
 
   x: number;
@@ -12,12 +13,7 @@ export abstract class BaseShape implements ShapeDto {
   height: number;
   rotation?: number; // degrees
 
-  fill?: string;
-  stroke?: string;
-  strokeWidth?: number;
-  opacity?: number;
-  strokeDasharray?: string;
-  strokeLinecap?: 'butt' | 'round' | 'square';
+  shapeStyles: ShapeStyles;
 
   isSelected?: boolean;
   metadata?: Record<string, unknown>;
@@ -33,12 +29,8 @@ export abstract class BaseShape implements ShapeDto {
     this.height = dto.height ?? 0;
     this.rotation = dto.rotation;
 
-    this.fill = dto.fill;
-    this.stroke = dto.stroke;
-    this.strokeWidth = dto.strokeWidth;
-    this.opacity = dto.opacity;
-    this.strokeDasharray = dto.strokeDasharray;
-    this.strokeLinecap = dto.strokeLinecap;
+    this.shapeStyles = dto.shapeStyles ?? ({} as ShapeStyles);
+
 
     this.isSelected = dto.isSelected;
     this.metadata = dto.metadata;
@@ -69,10 +61,17 @@ export abstract class BaseShape implements ShapeDto {
   endDrag() {
     this._dragOffset = undefined;
   }
-
+  protected stylesToAttribute() {
+    return Object.entries(this.shapeStyles).map(([key, value]) => `${this.toKebabCase(key)}="${value}"`).join(" ");
+  }
+  protected toKebabCase(str: string) {
+    return str.replace(/[A-Z]/g, m => "-" + m.toLowerCase());
+  }
   abstract applyPositionToElement(el: SVGGraphicsElement): void;
 
-  abstract toSVG(): string;
+  abstract getSVG(): string;
+  abstract getProps(): ShapeDto;
+  abstract getXML(): string;
 
   abstract containsPoint(): boolean;
 

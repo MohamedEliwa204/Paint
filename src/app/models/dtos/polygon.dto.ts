@@ -1,8 +1,8 @@
 
 import { ShapeDto } from './shape.dto';
 
-export interface TriangleDto extends ShapeDto {
-  type: 'triangle';
+export interface PolygonDto extends ShapeDto {
+  type: 'polygon';
 
   points?: { x: number; y: number }[];
 }

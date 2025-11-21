@@ -1,7 +1,7 @@
 
-import { ShapeDto } from './shape.dto';
+import { RectangleDto } from './rectangle.dto';
 
-export interface SquareDto extends ShapeDto {
+export interface SquareDto extends RectangleDto {
   type: 'square';
 
   side?: number;
