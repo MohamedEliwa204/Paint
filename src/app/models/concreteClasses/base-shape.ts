@@ -1,6 +1,6 @@
-
 import {ShapeDto, ShapeType} from '../dtos/shape.dto';
-export abstract class BaseShape implements ShapeDto{
+
+export abstract class BaseShape implements ShapeDto {
 
   id: string;
   type: ShapeType;
@@ -21,8 +21,9 @@ export abstract class BaseShape implements ShapeDto{
 
   isSelected?: boolean;
   metadata?: Record<string, unknown>;
+  protected _dragOffset?: { x: number; y: number }; // because i use it in all children classes
 
-  constructor(dto: ShapeDto) {
+  protected constructor(dto: ShapeDto) {
 
     this.id = dto.id;
     this.type = dto.type;
@@ -48,17 +49,32 @@ export abstract class BaseShape implements ShapeDto{
     this.y += dy;
   }
 
-  resize(dw: number, dh:number){
+  resize(dw: number, dh: number) {
     this.width = Math.max(0, this.width + dw);
     this.height = Math.max(0, this.height + dh);
   }
 
-  startDrag(poniterX:number, pointerY:number){}
-  dragTo(poniterX:number, pointerY:number){}
-  endDrag(){}
-  abstract applyPositionToElement(el: SVGGraphicsElement):void;
-  abstract toSVG():string;
-  abstract containsPoint():boolean;
+  startDrag(poniterX: number, pointerY: number) {
+    this._dragOffset = {x: poniterX - this.x, y: pointerY - this.y};
+  }
+
+  dragTo(pointerX: number, pointerY: number) {
+    if (!this._dragOffset){
+      return
+    }
+    this.x = pointerX - this._dragOffset.x;
+    this.y = pointerY - this._dragOffset.y;
+  }
+
+  endDrag() {
+    this._dragOffset = undefined;
+  }
+
+  abstract applyPositionToElement(el: SVGGraphicsElement): void;
+
+  abstract toSVG(): string;
+
+  abstract containsPoint(): boolean;
 
 
 }
