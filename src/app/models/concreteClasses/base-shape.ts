@@ -1,5 +1,5 @@
 
-import {ShapeDto, ShapeType} from './shape.dto';
+import {ShapeDto, ShapeType} from '../dtos/shape.dto';
 export abstract class BaseShape implements ShapeDto{
 
   id: string;
@@ -53,7 +53,12 @@ export abstract class BaseShape implements ShapeDto{
     this.height = Math.max(0, this.height + dh);
   }
 
+  startDrag(poniterX:number, pointerY:number){}
+  dragTo(poniterX:number, pointerY:number){}
+  endDrag(){}
   abstract applyPositionToElement(el: SVGGraphicsElement):void;
   abstract toSVG():string;
+  abstract containsPoint():boolean;
+
 
 }
