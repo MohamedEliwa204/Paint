@@ -51,15 +51,17 @@ export class RectangleShape extends BaseShape {
     }
   }
 
-  endReshape(): void {
+  override startResize(pointX: number, pointY: number): void {
+    throw new Error("Method not implemented.");
   }
 
-  reshaping(pointX: number, pointY: number): void {
+  override resizing(pointX: number, pointY: number): void {
+    throw new Error("Method not implemented.");
   }
 
-  startReshap(pointX: number, pointY: number): void {
+  override endResizing(): void {
+    throw new Error("Method not implemented.");
   }
-
 
 
 }

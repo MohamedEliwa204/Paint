@@ -80,9 +80,9 @@ export abstract class BaseShape implements ShapeDto {
 
   abstract containsPoint(pointX: number, pointY: number): boolean;
 
-  abstract startReshap(pointX: number, pointY: number): void;
+  abstract startResize(pointX: number, pointY: number, handle: string | null): void;
 
-  abstract reshaping(pointX: number, pointY: number): void;
+  abstract resizing(pointX: number, pointY: number): void;
 
-  abstract endReshape(): void;
+  abstract endResizing(): void;
 }

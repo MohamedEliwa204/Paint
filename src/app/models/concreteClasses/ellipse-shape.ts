@@ -4,6 +4,7 @@ import {ShapeDto} from '../dtos/shape.dto';
 
 export class EllipseShape<T extends ShapeDto = EllipseDto> extends BaseShape {
 
+
   override type: string;
   cx?: number;
   cy?: number;
@@ -63,13 +64,13 @@ export class EllipseShape<T extends ShapeDto = EllipseDto> extends BaseShape {
   getXML(): string {
     return this.getSVG();
   }
-  override startReshap(pointX: number, pointY: number): void {
+  override startResize(pointX: number, pointY: number): void {
     throw new Error("Method not implemented.");
   }
-  override reshaping(pointX: number, pointY: number): void {
+  override resizing(pointX: number, pointY: number): void {
     throw new Error("Method not implemented.");
   }
-  override endReshape(): void {
+  override endResizing(): void {
     throw new Error("Method not implemented.");
   }
 }
