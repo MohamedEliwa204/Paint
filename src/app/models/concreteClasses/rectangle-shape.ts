@@ -51,6 +51,15 @@ export class RectangleShape extends BaseShape {
     }
   }
 
+  endReshape(): void {
+  }
+
+  reshaping(pointX: number, pointY: number): void {
+  }
+
+  startReshap(pointX: number, pointY: number): void {
+  }
+
 
 
 }

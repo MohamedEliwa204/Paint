@@ -61,19 +61,28 @@ export abstract class BaseShape implements ShapeDto {
   endDrag() {
     this._dragOffset = undefined;
   }
+
   protected stylesToAttribute() {
     return Object.entries(this.shapeStyles).map(([key, value]) => `${this.toKebabCase(key)}="${value}"`).join(" ");
   }
+
   protected toKebabCase(str: string) {
     return str.replace(/[A-Z]/g, m => "-" + m.toLowerCase());
   }
+
   abstract applyPositionToElement(el: SVGGraphicsElement): void;
 
   abstract getSVG(): string;
+
   abstract getProps(): ShapeDto;
+
   abstract getXML(): string;
 
-  abstract containsPoint(): boolean;
+  abstract containsPoint(pointX: number, pointY: number): boolean;
 
+  abstract startReshap(pointX: number, pointY: number): void;
 
+  abstract reshaping(pointX: number, pointY: number): void;
+
+  abstract endReshape(): void;
 }

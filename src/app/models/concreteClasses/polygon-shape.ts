@@ -43,4 +43,13 @@ export class PolygonShape extends BaseShape implements PolygonDto {
       shapeStyles: this.shapeStyles
     };
   }
+
+  endReshape(): void {
+  }
+
+  reshaping(pointX: number, pointY: number): void {
+  }
+
+  startReshap(pointX: number, pointY: number): void {
+  }
 }

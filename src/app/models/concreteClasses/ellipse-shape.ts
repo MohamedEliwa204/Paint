@@ -3,6 +3,7 @@ import {BaseShape} from './base-shape';
 import {ShapeDto} from '../dtos/shape.dto';
 
 export class EllipseShape<T extends ShapeDto = EllipseDto> extends BaseShape {
+
   override type: string;
   cx?: number;
   cy?: number;
@@ -31,8 +32,15 @@ export class EllipseShape<T extends ShapeDto = EllipseDto> extends BaseShape {
     return `<ellipse id="${this.id}" cx=${this.cx} cy=${this.cy} rx=${this.rx} ry=${this.ry} ${this.stylesToAttribute()} />`
   }
 
-  override containsPoint(): boolean {
-    return false;
+  override containsPoint(pointX:number, pointY:number): boolean {
+    if (this.cx === undefined || this.cy === undefined || this.rx === undefined || this.ry === undefined) {
+      return false;
+    }
+
+    const normalizedX = (pointX - this.cx) / this.rx;
+    const normalizedY = (pointY - this.cy) / this.ry;
+
+    return (normalizedX ** 2 + normalizedY ** 2) <= 1;
   }
 
   getProps(): T{
@@ -54,5 +62,14 @@ export class EllipseShape<T extends ShapeDto = EllipseDto> extends BaseShape {
 
   getXML(): string {
     return this.getSVG();
+  }
+  override startReshap(pointX: number, pointY: number): void {
+    throw new Error("Method not implemented.");
+  }
+  override reshaping(pointX: number, pointY: number): void {
+    throw new Error("Method not implemented.");
+  }
+  override endReshape(): void {
+    throw new Error("Method not implemented.");
   }
 }
