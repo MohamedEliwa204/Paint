@@ -30,7 +30,7 @@ export class RectangleShape extends BaseShape {
   }
 
   override getSVG() {
-    return `<rect id=${this.id} x=${this.x} y=${this.y} width=${this.width} height=${this.height} ${this.stylesToAttribute()} />`
+    return `<rect id="${this.id}" x=${this.x} y=${this.y} width=${this.width} height=${this.height} ${this.stylesToAttribute()} />`
   }
 
   override getXML() {
@@ -40,7 +40,7 @@ export class RectangleShape extends BaseShape {
   override getProps(): RectangleDto {
     return {
       id: this.id,
-      type: 'rectangle',
+      type: 'rect',
       x: this.x,
       y: this.y,
       width: this.width,

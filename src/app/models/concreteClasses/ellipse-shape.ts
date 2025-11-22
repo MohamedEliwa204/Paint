@@ -29,7 +29,7 @@ export class EllipseShape<T extends ShapeDto = EllipseDto> extends BaseShape {
 
 
   override getSVG(): string {
-    return `<ellipse id=${this.id} cx=${this.cx} cy=${this.cy} rx=${this.rx} ry=${this.ry} ${this.stylesToAttribute()} />`
+    return `<ellipse id="${this.id}" cx=${this.cx} cy=${this.cy} rx=${this.rx} ry=${this.ry} ${this.stylesToAttribute()} />`
   }
 
   override containsPoint(pointX:number, pointY:number): boolean {

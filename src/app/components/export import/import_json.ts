@@ -1,69 +1,76 @@
-import { Line } from '../../models/Line';
-import { Rectangle } from '../../models/Rectangle';
-import { Square } from '../../models/Square';
-import { Ellipse } from '../../models/Ellipse';
-import { Circle } from '../../models/Cirlce';
-import { Polygon } from '../../models/Polygon';
-import { Shape, ShapeStyles } from '../../models/Shape';
-import { ShapeJSON } from '../../models/Shape';
+import { LineShape } from '../../models/concreteClasses/line-shape';
+import { RectangleShape } from '../../models/concreteClasses/rectangle-shape';
+import { SquareShape } from '../../models/concreteClasses/square-shape';
+import { EllipseShape } from '../../models/concreteClasses/ellipse-shape';
+import { CircleShape } from '../../models/concreteClasses/circle-shape';
+import { ShapeStyles } from '../../models/dtos/shape.dto';
+import { BaseShape } from '../../models/concreteClasses/base-shape';
+import { PolygonShape } from '../../models/concreteClasses/polygon-shape';
 export class ImportJson {
     import(shapesJson: string) {
-        let shapesArray: ShapeJSON[] = JSON.parse(shapesJson);
+        let shapesArray: any[] = JSON.parse(shapesJson);
         return shapesArray.map(shape => this.createShape(shape));
     }
 
-    private createShape(shape: ShapeJSON): Shape {
+    private createShape(shape: any): BaseShape {
         switch (shape.type) {
             case 'line':
-                return new Line(
-                    shape.id,
-                    shape.x1 ?? 0,
-                    shape.y1 ?? 0,
-                    shape.x2 ?? 0,
-                    shape.y2 ?? 0,
-                    shape.shapeStyles
-                );
+                return new LineShape({
+                    id: shape.id,
+                    type: 'line',
+                    x1: shape.x1 ?? 0,
+                    y1: shape.y1 ?? 0,
+                    x2: shape.x2 ?? 0,
+                    y2: shape.y2 ?? 0,
+                    shapeStyles: shape.shapeStyles
+                });
             case 'rect':
-                return new Rectangle(
-                    shape.id,
-                    shape.x ?? 0,
-                    shape.y ?? 0,
-                    shape.width ?? 0,
-                    shape.height ?? 0,
-                    shape.shapeStyles
-                );
+                return new RectangleShape({
+                    id: shape.id,
+                    type: 'rectangle',
+                    x: shape.x ?? 0,
+                    y: shape.y ?? 0,
+                    width: shape.width ?? 0,
+                    height: shape.height ?? 0,
+                    shapeStyles: shape.shapeStyles
+                });
             case 'square':
-                return new Square(
-                    shape.id,
-                    shape.x ?? 0,
-                    shape.y ?? 0,
-                    shape.width ?? 0,
-                    shape.shapeStyles
-                );
+                return new SquareShape({
+                    id: shape.id,
+                    type: 'square',
+                    x: shape.x ?? 0,
+                    y: shape.y ?? 0,
+                    width: shape.width ?? 0,
+                    height: shape.height ?? 0,
+                    shapeStyles: shape.shapeStyles
+                });
             case 'ellipse':
-                return new Ellipse(
-                    shape.id,
-                    shape.cx ?? 0,
-                    shape.cy ?? 0,
-                    shape.rx ?? 0,
-                    shape.ry ?? 0,
-                    shape.shapeStyles
-                );
+                return new EllipseShape({
+                    id: shape.id,
+                    type: 'ellipse',
+                    cx: shape.cx ?? 0,
+                    cy: shape.cy ?? 0,
+                    rx: shape.rx ?? 0,
+                    ry: shape.ry ?? 0,
+                    shapeStyles: shape.shapeStyles
+                });
             case 'circle':
-                return new Circle(
-                    shape.id,
-                    shape.cx ?? 0,
-                    shape.cy ?? 0,
-                    shape.r ?? 0,
-                    shape.shapeStyles
-                );
+                return new CircleShape({
+                    id: shape.id,
+                    type: 'circle',
+                    cx: shape.cx ?? 0,
+                    cy: shape.cy ?? 0,
+                    r: shape.r ?? 0,
+                    shapeStyles: shape.shapeStyles
+                });
 
             case 'polygon':
-                return new Polygon(
-                    shape.id,
-                    shape.points ?? [],
-                    shape.shapeStyles
-                );
+                return new PolygonShape({
+                    id: shape.id,
+                    type: 'polygon',
+                    points: shape.points ?? [],
+                    shapeStyles: shape.shapeStyles
+                });
             default:
                 throw new Error(`Unknown shape type: ${shape.type}`);
         }

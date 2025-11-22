@@ -24,7 +24,7 @@ export class PolygonShape extends BaseShape implements PolygonDto {
 
   override getSVG(): string {
     const pointsAttr = this.points.map(p => `${p.x},${p.y}`).join(" ");
-    return `<polygon id=${this.id} points="${pointsAttr}" ${this.stylesToAttribute()} />`;
+    return `<polygon id="${this.id}" points="${pointsAttr}" ${this.stylesToAttribute()} />`;
   }
 
   override getXML(): string {

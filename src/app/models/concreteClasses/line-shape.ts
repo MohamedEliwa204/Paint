@@ -17,11 +17,11 @@ export class LineShape extends BaseShape implements LineDto {
   }
 
   override getSVG(): string {
-    return `<line id=${this.id} x1=${this.x1} y1=${this.y1} x2=${this.x2} y2=${this.y2} ${this.stylesToAttribute()} />`;
+    return `<line id="${this.id}" x1=${this.x1} y1=${this.y1} x2=${this.x2} y2=${this.y2} ${this.stylesToAttribute()} />`;
   }
 
   override getXML(): string {
-    return `<line id=${this.id} x1=${this.x1} y1=${this.y1} x2=${this.x2} y2=${this.y2} ${this.stylesToAttribute()} />`;
+    return `<line id="${this.id}" x1=${this.x1} y1=${this.y1} x2=${this.x2} y2=${this.y2} ${this.stylesToAttribute()} />`;
   }
 
   override getProps(): LineDto {

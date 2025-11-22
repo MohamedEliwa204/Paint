@@ -1,17 +1,18 @@
-import { Line } from '../../models/Line';
-import { Rectangle } from '../../models/Rectangle';
-import { Square } from '../../models/Square';
-import { Ellipse } from '../../models/Ellipse';
-import { Circle } from '../../models/Cirlce';
-import { Polygon } from '../../models/Polygon';
-import { Shape, ShapeStyles } from '../../models/Shape';
+import { LineShape } from '../../models/concreteClasses/line-shape';
+import { RectangleShape } from '../../models/concreteClasses/rectangle-shape';
+import { SquareShape } from '../../models/concreteClasses/square-shape';
+import { EllipseShape } from '../../models/concreteClasses/ellipse-shape';
+import { CircleShape } from '../../models/concreteClasses/circle-shape';
+import { ShapeStyles } from '../../models/dtos/shape.dto';
+import { BaseShape } from '../../models/concreteClasses/base-shape';
+import { PolygonShape } from '../../models/concreteClasses/polygon-shape';
 const defaultStyleKeys = ["stroke", "strokeWidth", "fill", "opacity", "strokeDashArray"];
 export class ImportXML {
     import(xml: string) {
         let tagsArray = xml.split("\n");
         if (tagsArray[0] != `<?xml version="1.0" encoding="ISO-8859-1"?>`) throw new Error("Invalid xml");
         if (tagsArray[1] != `<shapes>` || tagsArray[tagsArray.length - 1] != `</shapes>`) throw new Error("Invalid xml");
-        let shapes: Shape[] = [];
+        let shapes: BaseShape[] = [];
         for (let i = 2; i < tagsArray.length - 1; i++) {
             let tag = tagsArray[i];
             shapes.push(this.tagToShape(tag));
@@ -47,7 +48,15 @@ export class ImportXML {
         }
         let startIndex = parts.findIndex(part => defaultStyleKeys.includes(part.split("=")[0]));
         let shapeStyles = this.parseStyles(parts.slice(startIndex))
-        return new Line(parseFloat(id), parseFloat(x1), parseFloat(y1), parseFloat(x2), parseFloat(y2), shapeStyles);
+        return new LineShape({
+            id: id,
+            type: 'line',
+            x1: parseFloat(x1),
+            y1: parseFloat(y1),
+            x2: parseFloat(x2),
+            y2: parseFloat(y2),
+            shapeStyles: shapeStyles
+        });
     }
 
     parseRect(parts: string[]) {
@@ -63,14 +72,16 @@ export class ImportXML {
             throw new Error("Invalid Rectangle tag" + parts.join(" "));
         let startIndex = parts.findIndex(part => defaultStyleKeys.includes(part.split("=")[0]));
         let shapeStyles = this.parseStyles(parts.slice(startIndex))
-        return new Rectangle(
-            parseFloat(id),
-            parseFloat(x),
-            parseFloat(y),
-            parseFloat(width),
-            parseFloat(height),
-            shapeStyles
-        );
+        const rectangle = new RectangleShape({
+            id: id,
+            type: 'rectangle',
+            x: parseFloat(x),
+            y: parseFloat(y),
+            width: parseFloat(width),
+            height: parseFloat(height),
+            shapeStyles: shapeStyles
+        });
+        return rectangle;
     }
 
     parseSquare(parts: string[]) {
@@ -79,20 +90,26 @@ export class ImportXML {
         console.log(id?.length)
 
         console.log(parseFloat(id?.trim()!))
+        console.log(parts)
 
         let x = parts.find(part => part.startsWith("x="))?.split("=")[1];
         let y = parts.find(part => part.startsWith("y="))?.split("=")[1];
-        let side = parts.find(part => part.startsWith("side="))?.split("=")[1];
-        if (id === undefined || x === undefined || y === undefined || side === undefined)
+        let width = parts.find(part => part.startsWith("width="))?.split("=")[1];
+        let height = parts.find(part => part.startsWith("height="))?.split("=")[1];
+        if (id === undefined || x === undefined || y === undefined || height === undefined || width === undefined)
             throw new Error("Invalid Square tag" + parts.join(" "));
         let startIndex = parts.findIndex(part => defaultStyleKeys.includes(part.split("=")[0]));
         let shapeStyles = this.parseStyles(parts.slice(startIndex))
-        return new Square(
-            parseFloat(id),
-            parseFloat(x),
-            parseFloat(y),
-            parseFloat(side),
-            shapeStyles
+        return new SquareShape(
+            {
+                id: id,
+                type: 'square',
+                x: parseFloat(x),
+                y: parseFloat(y),
+                width: parseFloat(width),
+                height: parseFloat(height),
+                shapeStyles: shapeStyles
+            }
         );
     }
 
@@ -109,18 +126,25 @@ export class ImportXML {
             throw new Error("Invalid Ellipse tag" + parts.join(" "));
         let startIndex = parts.findIndex(part => defaultStyleKeys.includes(part.split("=")[0]));
         let shapeStyles = this.parseStyles(parts.slice(startIndex))
-        return new Ellipse(parseInt(id),
-            parseFloat(cx),
-            parseFloat(cy),
-            parseFloat(rx),
-            parseFloat(ry),
-            shapeStyles)
+        return new EllipseShape(
+            {
+                id: id,
+                type: 'ellipse',
+                cx: parseFloat(cx),
+                cy: parseFloat(cy),
+                rx: parseFloat(rx),
+                ry: parseFloat(ry),
+                shapeStyles
+            })
     }
 
     parseCircle(parts: string[]) {
         let id = parts.find(part => part.startsWith("id="))?.split("=")[1].replace(/['"]/g, "");
         console.log(id)
         console.log(parseFloat(id?.trim()!))
+        console.log("circle parts")
+        console.log(parts)
+
         let cx = parts.find(part => part.startsWith("cx="))?.split("=")[1];
         let cy = parts.find(part => part.startsWith("cy="))?.split("=")[1];
         let r = parts.find(part => part.startsWith("r="))?.split("=")[1];
@@ -128,14 +152,19 @@ export class ImportXML {
             throw new Error("Invalid Circle tag" + parts.join(" "));
         let startIndex = parts.findIndex(part => defaultStyleKeys.includes(part.split("=")[0]));
         let shapeStyles = this.parseStyles(parts.slice(startIndex))
-        return new Circle(parseInt(id),
-            parseFloat(cx),
-            parseFloat(cy),
-            parseFloat(r),
-            shapeStyles)
+        return new CircleShape(
+            {
+                id: id,
+                type: 'circle',
+                cx: parseFloat(cx),
+                cy: parseFloat(cy),
+                r: parseFloat(r),
+                shapeStyles: shapeStyles
+            }
+        );
     }
 
-    private parsePolygon(parts: string[]): Polygon {
+    private parsePolygon(parts: string[]): PolygonShape {
         // --- Extract id ---
         const rawId = parts.find(p => p.startsWith("id="));
         const idStr = rawId?.split("=")[1].replace(/['"]/g, "");
@@ -173,7 +202,12 @@ export class ImportXML {
             shapeStyles = this.parseStyles(parts.slice(startIndex));
         }
 
-        return new Polygon(id, points, shapeStyles);
+        return new PolygonShape({
+            id: idStr,
+            type: 'polygon',
+            points: points,
+            shapeStyles: shapeStyles
+        });
     }
 
     parseStyles(parts: string[]): ShapeStyles {

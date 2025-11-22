@@ -1,5 +1,5 @@
-import {RectangleShape} from './rectangle-shape';
-import {SquareDto} from '../dtos/square.dto';
+import { RectangleShape } from './rectangle-shape';
+import { SquareDto } from '../dtos/square.dto';
 
 
 export class SquareShape extends RectangleShape implements SquareDto {
@@ -28,5 +28,12 @@ export class SquareShape extends RectangleShape implements SquareDto {
       side: this.side,
       shapeStyles: this.shapeStyles
     };
+  }
+
+  override getSVG(): string {
+    return `<rect id="${this.id}" x=${this.x} y=${this.y} width=${this.width} height=${this.height} ${this.stylesToAttribute()} />`;
+  }
+  override getXML(): string {
+    return `<square id="${this.id}" x=${this.x} y=${this.y} width=${this.width} height=${this.height} ${this.stylesToAttribute()} />`;
   }
 }

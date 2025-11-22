@@ -35,6 +35,12 @@ export class CircleShape extends EllipseShape<CircleDto> implements CircleDto{
     };
   }
 
+  override getXML(): string {
+    return `<circle id="${this.id}" cx=${this.cx} cy=${this.cy} r=${this.r} ${this.stylesToAttribute()} />`;
+  }
 
+  override getSVG(): string {
+    return `<circle id="${this.id}" cx=${this.cx} cy=${this.cy} r=${this.r} ${this.stylesToAttribute()} />`;
+  }
 }
 
