@@ -54,13 +54,5 @@ export class LineShape extends BaseShape implements LineDto {
     return false;
   }
 
-  override startResize(pointX: number, pointY: number): void {
-    throw new Error("Method not implemented.");
-  }
-  override resizing(pointX: number, pointY: number): void {
-    throw new Error("Method not implemented.");
-  }
-  override endResizing(): void {
-    throw new Error("Method not implemented.");
-  }
+
 }

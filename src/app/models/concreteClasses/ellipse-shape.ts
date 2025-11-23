@@ -64,13 +64,5 @@ export class EllipseShape<T extends ShapeDto = EllipseDto> extends BaseShape {
   getXML(): string {
     return this.getSVG();
   }
-  override startResize(pointX: number, pointY: number): void {
-    throw new Error("Method not implemented.");
-  }
-  override resizing(pointX: number, pointY: number): void {
-    throw new Error("Method not implemented.");
-  }
-  override endResizing(): void {
-    throw new Error("Method not implemented.");
-  }
+
 }

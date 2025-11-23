@@ -11,8 +11,8 @@ import {NgIf} from '@angular/common';
   styleUrl: './drawing-canvas.css',
 })
 export class DrawingCanvas implements AfterViewInit {
-  private shapeService = inject(ShapeSelection);
-  private elementRef = inject(ElementRef);
+  private readonly shapeService = inject(ShapeSelection);
+  private readonly elementRef = inject(ElementRef);
 
   private svg: SVGSVGElement | null = null;
   private selectedElement: SVGGraphicsElement | null = null;
@@ -70,7 +70,7 @@ export class DrawingCanvas implements AfterViewInit {
 
         shape.startResize(svgPoint.x, svgPoint.y, this.activeResizeHandle);
       }
-      event.stopPropagation(); // Stop event so we don't start dragging too
+      event.stopPropagation(); //  don't start dragging too
       return;
     }
 
