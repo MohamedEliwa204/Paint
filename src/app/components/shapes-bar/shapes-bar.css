@@ -1,60 +1,223 @@
+main {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-around;
+  gap: 20px;
+  background-color: #f8fafc;
+  padding: 20px;
+  flex-wrap: wrap;
+}
+
 /* Container for the shapes bar */
 div {
-  background: linear-gradient(145deg, #e6eaef, #f5f7fa);
+  background: linear-gradient(145deg, #ffffff, #f1f5f9);
   display: flex;
-  gap: 12px;
-  padding: 16px 20px;
-  border-radius: 12px;
-  border: none;
+  gap: 10px;
+  padding: 14px 18px;
+  border-radius: 16px;
+  border: 1px solid #e2e8f0;
   justify-content: center;
   align-items: center;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1),
-              0 1px 3px rgba(0, 0, 0, 0.08);
-  transition: all 0.3s ease;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08),
+              0 4px 10px rgba(0, 0, 0, 0.04),
+              inset 0 1px 0 rgba(255, 255, 255, 0.9);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Styles section specific styling */
+.styles {
+  gap: 16px;
+  padding: 12px 20px;
+  background: linear-gradient(145deg, #f8fafc, #ffffff);
+}
+
+.styles label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 500;
+  color: #475569;
+  white-space: nowrap;
+}
+
+/* Style inputs */
+.styles input[type="color"] {
+  width: 36px;
+  height: 36px;
+  border: 2px solid #e2e8f0;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  padding: 2px;
+}
+
+.styles input[type="color"]:hover {
+  border-color: #4299e1;
+  box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.1);
+}
+
+.styles select {
+  padding: 6px 10px;
+  border: 2px solid #e2e8f0;
+  border-radius: 6px;
+  background-color: #ffffff;
+  color: #475569;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-width: 70px;
+}
+
+.styles select:hover {
+  border-color: #4299e1;
+  background-color: #f8fafc;
+}
+
+.styles select:focus {
+  outline: none;
+  border-color: #4299e1;
+  box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.1);
 }
 
 /* Shape buttons */
 button {
-  background-color: #ffffff;
-  border: 2px solid #cbd5e0;
-  border-radius: 8px;
-  width: 50px;
-  height: 50px;
+  background: linear-gradient(145deg, #ffffff, #f8fafc);
+  border: 2px solid #e2e8f0;
+  border-radius: 10px;
+  width: 48px;
+  height: 48px;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.2s ease;
-  color: #2d3748;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  color: #475569;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04),
+              0 1px 2px rgba(0, 0, 0, 0.06);
   padding: 0;
+  position: relative;
+  overflow: hidden;
+}
+
+button::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(66, 153, 225, 0.3);
+  transform: translate(-50%, -50%);
+  transition: width 0.6s, height 0.6s;
+}
+
+button:active::before {
+  width: 100px;
+  height: 100px;
 }
 
 /* SVG icons inside buttons */
 button svg {
-  width: 28px;
-  height: 28px;
-  transition: all 0.2s ease;
+  width: 26px;
+  height: 26px;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  z-index: 1;
 }
 
 /* Hover effect */
 button:hover {
-  background-color: #f7fafc;
-  border-color: #4299e1;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(66, 153, 225, 0.3);
+  background: linear-gradient(145deg, #f8fafc, #ffffff);
+  border-color: #3b82f6;
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 0 8px 16px rgba(59, 130, 246, 0.25),
+              0 4px 8px rgba(59, 130, 246, 0.15);
+}
+
+button:hover svg {
+  transform: scale(1.1);
 }
 
 /* Active/clicked effect */
 button:active {
-  transform: translateY(0);
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  transform: translateY(-1px) scale(1.02);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
+/* Selected state */
 button.selected {
-  background-color: #4299e1;
-  border-color: #3182ce;
+  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+  border-color: #2563eb;
   color: #ffffff;
-  box-shadow: 0 4px 8px rgba(66, 153, 225, 0.4);
+  box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4),
+              0 3px 10px rgba(59, 130, 246, 0.3),
+              inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  transform: translateY(-2px);
 }
 
+button.selected:hover {
+  background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 0 10px 25px rgba(59, 130, 246, 0.5),
+              0 5px 12px rgba(59, 130, 246, 0.35);
+}
+
+button.selected svg {
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+}
+
+button:nth-child(7) svg {
+  width: 22px;
+  height: 22px;
+}
+
+button[title]:hover::after {
+  content: attr(title);
+  position: absolute;
+  bottom: -35px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #1e293b;
+  color: #ffffff;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 12px;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  animation: fadeInTooltip 0.3s ease forwards;
+  z-index: 10;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+@keyframes fadeInTooltip {
+  to {
+    opacity: 1;
+  }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  main {
+    flex-direction: column;
+    gap: 16px;
+  }
+  
+  div {
+    width: 100%;
+    justify-content: flex-start;
+    overflow-x: auto;
+  }
+  
+  .styles {
+    flex-wrap: wrap;
+  }
+  
+  button {
+    width: 44px;
+    height: 44px;
+  }
+}
