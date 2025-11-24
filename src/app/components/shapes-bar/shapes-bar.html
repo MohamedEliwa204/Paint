@@ -135,8 +135,8 @@
     <label title="Line Cap">
       Cap:
       <select
-        [(ngModel)]="currentStyles.strokeLinecap"
-        (change)="applyStyle('strokeLinecap', currentStyles.strokeLinecap)"
+        [(ngModel)]="currentStyles.lineCap"
+        (change)="applyStyle('lineCap', currentStyles.lineCap)"
       >
         <option *ngFor="let cap of lineCaps" [value]="cap">{{ cap }}</option>
       </select>
@@ -146,8 +146,8 @@
     <label title="Dash Style">
       Dash:
       <select
-        [(ngModel)]="currentStyles.strokeDashArray"
-        (change)="applyStyle('strokeDashArray', currentStyles.strokeDashArray)"
+        [(ngModel)]="currentStyles.dash"
+        (change)="applyStyle('dash', currentStyles.dash)"
       >
         <option value="">solid</option>
         <option *ngFor="let dash of strokeDashArrays" [value]="dash">{{ dash }}</option>

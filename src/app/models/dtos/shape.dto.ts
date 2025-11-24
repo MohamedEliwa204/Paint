@@ -1,11 +1,11 @@
-export type ShapeType = 'rect' | 'ellipse' | 'svg' | 'polygon' | 'line' | 'square' |'circle';
+export type ShapeType = 'rectangle' | 'ellipse' | 'svg' | 'polygon' | 'line' | 'square' | 'circle';
 export type ShapeStyles = {
   stroke?: string,
   strokeWidth?: number,
   fill?: string,
   opacity?: number,
-  strokeDashArray?: string,
-  strokeLinecap?: 'butt' | 'round' | 'square';
+  dash?: number[],
+  lineCap?: 'butt' | 'round' | 'square';
   [key: string]: any
 }
 export interface ShapeDto {

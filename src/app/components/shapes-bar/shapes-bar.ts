@@ -29,8 +29,9 @@ export class ShapesBar {
   private isDrawing: boolean = false;
   strokeWidths: number[] = [1, 2, 4, 6];
   opacities: number[] = [1, 0.75, 0.5, 0.25];
+  // for Lines 
   lineCaps: ('butt' | 'round' | 'square')[] = ['butt', 'round', 'square'];
-  strokeDashArrays: string[] = ['4,2', '8,4', '2,6'];
+  strokeDashArrays: ([number, number])[] = [[4, 2], [8, 4], [2, 6]];
 
   private createShape(shapeName: string): BaseShape | null {
     console.log('Creating shape:', shapeName);

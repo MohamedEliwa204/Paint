@@ -51,7 +51,11 @@ export class KonvaHandler {
             this.iniX = Position.x;
             this.iniY = Position.y;
             let styles = this.selectedShape.shapeStyles;
+            if (this.styles.dash && typeof this.styles.dash === 'string') {
+                styles.dash = this.styles.dash.split(',').map((s: string) => Number(s.trim())).filter((n: number) => !isNaN(n)) || [];
+            }
             const shape = this.selectedShape;
+            console.log(styles.dash);
             console.log(this.styles);
             if (shape) {
                 this.mockShape = this.mockFactory.createShape(shape.type as 'rectangle' | 'circle' | 'ellipse' | 'line' | 'square' | 'triangle' | 'free-draw', this.iniX, this.iniY, 0, 0, { ...styles });
@@ -125,9 +129,14 @@ export class KonvaHandler {
         this.stage.on("mouseup touchend", () => {
             if (this.mockShape) {
                 // Stay stale until backend responds with created shape
+                // After the backend responds , finalize the shape creation
 
                 this.layer.add(this.mockShape);
                 this.shapeLogic.selectShape(this.mockShape);
+                this.shapeLogic.onDrawingShape(this.mockShape);
+                this.shapeLogic.onShapeDragEnd(this.mockShape);
+                this.shapeLogic.onShapeTransformEnd(this.mockShape);
+                this.shapeLogic.onShapeAttStyleChange(this.mockShape);
                 this.layer.batchDraw();
                 this.shapes.push(this.mockShape);
                 this.mockShape = undefined;
