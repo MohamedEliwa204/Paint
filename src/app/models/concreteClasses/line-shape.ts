@@ -1,8 +1,9 @@
-import {BaseShape} from './base-shape';
-import {LineDto} from '../dtos/line.dto';
+import { BaseShape } from './base-shape';
+import { LineDto } from '../dtos/line.dto';
+import as from '@angular/common/locales/extra/as';
 
 export class LineShape extends BaseShape implements LineDto {
-  override type = 'line' as const;
+  override type : 'line' | 'free-draw' = 'line';
   x1: number;
   x2: number;
   y1: number;
@@ -27,7 +28,7 @@ export class LineShape extends BaseShape implements LineDto {
   override getProps(): LineDto {
     return {
       id: this.id,
-      type: 'line',
+      type: this.type,
       x1: this.x1,
       y1: this.y1,
       x2: this.x2,

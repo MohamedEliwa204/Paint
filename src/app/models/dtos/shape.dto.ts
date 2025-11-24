@@ -19,4 +19,5 @@ export interface ShapeDto {
   rotation?: number; // degrees
   isSelected?: boolean;
   metadata?: Record<string, unknown>;
+  points?: { x: number; y: number }[]; // For polygon and free-draw shapes
 }

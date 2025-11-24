@@ -11,6 +11,8 @@ export class KonvaHandler {
     mockShape: Konva.Shape | undefined = undefined;
     private mockFactory = new MockShapeFactory();
     private shapeService: any;
+    private isDrawingMode = false;
+    private shapes : Konva.Shape[] = [];
 
     constructor(containerId: string, width: number, height: number, shapeService: any) {
         this.shapeService = shapeService;
@@ -20,21 +22,34 @@ export class KonvaHandler {
         this.onMouseDown();
         this.onMouseMove();
         this.onMouseUp();
+
     }
 
     get selectedShape() {
         return this.shapeService.selectedShape();
     }
 
+    get styles() {
+        console.log(this.shapeService.currentStyles);
+        return this.shapeService.currentStyles;
+    }
+
+    get isDrawing() {
+        return this.shapeService.isDrawing();
+    }
+
+
     onMouseDown() {
         this.stage.on("mousedown touchdown", () => {
             let Position = this.stage.getPointerPosition();
-            if (!Position) return;
+            if (!Position ||!this.isDrawing) return;
             this.iniX = Position.x;
             this.iniY = Position.y;
+            let styles = this.selectedShape.shapeStyles;
             const shape = this.selectedShape;
+            console.log(this.styles);
             if (shape) {
-                this.mockShape = this.mockFactory.createShape(shape.type as 'rectangle' | 'circle' | 'ellipse', this.iniX, this.iniY, 0, 0);
+                this.mockShape = this.mockFactory.createShape(shape.type as 'rectangle' | 'circle' | 'ellipse' | 'line' | 'square' | 'triangle' | 'free-draw', this.iniX, this.iniY, 0, 0, { ...styles });
                 if (this.mockShape) {
                     this.layer.add(this.mockShape);
                 }
@@ -46,7 +61,7 @@ export class KonvaHandler {
     onMouseMove() {
         this.stage.on("mousemove touchmove", () => {
             let position = this.stage.getPointerPosition();
-            if (!position || !this.mockShape) return;
+            if (!position || !this.mockShape || !this.isDrawing) return;
             this.finX = position.x;
             this.finY = position.y;
             let width = Math.abs(this.finX - this.iniX);
@@ -83,13 +98,17 @@ export class KonvaHandler {
                 this.mockShape.radiusX(width / 2);
                 this.mockShape.radiusY(height / 2);
             }
-            else if (this.mockShape instanceof Konva.Line) {
+            else if (this.mockShape instanceof Konva.Line && type === 'line') {
                 this.mockShape.points([this.iniX, this.iniY, this.finX, this.finY]);
             }
             else if (this.mockShape instanceof Konva.RegularPolygon) {
                 this.mockShape.x((this.iniX + this.finX) / 2);
                 this.mockShape.y((this.iniY + this.finY) / 2);
-                this.mockShape.radius(Math.min(width, height) / 2);
+                this.mockShape.radius(Math.max(width, height) / 2);
+            }
+            else if (type === 'free-draw' && this.mockShape instanceof Konva.Line) {
+                const points = this.mockShape.points().concat([this.finX, this.finY]);
+                this.mockShape.points(points);
             }
             this.layer.batchDraw();
         })
@@ -101,8 +120,10 @@ export class KonvaHandler {
             if (this.mockShape) {
                 this.layer.add(this.mockShape);
                 this.layer.batchDraw();
+                this.shapes.push(this.mockShape);
                 this.mockShape = undefined;
             }
         })
+
     }
 }

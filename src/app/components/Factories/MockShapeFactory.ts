@@ -7,7 +7,8 @@ export type ShapeType =
     | 'line'
     | 'square'
     | 'triangle-non-eq'   // equilateral triangle
-    | 'triangle';     // non-equilateral
+    | 'triangle'     // non-equilateral
+    | 'free-draw';
 
 export class MockShapeFactory {
     createShape(
@@ -15,7 +16,8 @@ export class MockShapeFactory {
         x: number,
         y: number,
         width: number,
-        height: number
+        height: number,
+        styles: {[key: string]: any }
     ): Konva.Shape | undefined {
         switch (type) {
             case 'rectangle':
@@ -28,6 +30,7 @@ export class MockShapeFactory {
                     stroke: 'blue',
                     strokeWidth: 2,
                     draggable: true,
+                    ...styles
                 });
 
             case 'square':
@@ -40,6 +43,7 @@ export class MockShapeFactory {
                     stroke: 'blue',
                     strokeWidth: 2,
                     draggable: true,
+                    ...styles
                 });
 
             case 'circle':
@@ -51,6 +55,7 @@ export class MockShapeFactory {
                     stroke: 'green',
                     strokeWidth: 2,
                     draggable: true,
+                    ...styles
                 });
 
             case 'ellipse':
@@ -63,6 +68,7 @@ export class MockShapeFactory {
                     stroke: 'red',
                     strokeWidth: 2,
                     draggable: true,
+                    ...styles
                 });
 
             case 'line':
@@ -71,6 +77,7 @@ export class MockShapeFactory {
                     stroke: 'black',
                     strokeWidth: 2,
                     draggable: true,
+                    ...styles
                 });
 
             case 'triangle':
@@ -83,7 +90,18 @@ export class MockShapeFactory {
                     stroke: 'orange',
                     strokeWidth: 2,
                     draggable: true,
+                    ...styles
                 });
+            case 'free-draw': 
+            return new Konva.Line({
+                points: [x, y], // start point, will update dynamically
+                stroke: 'black',
+                strokeWidth: 2,
+                draggable: true,
+                lineCap: 'round',
+                lineJoin: 'round',
+                ...styles
+            })    
 
             // case 'triangle-non-eq':
             //     return new Konva.Line({
