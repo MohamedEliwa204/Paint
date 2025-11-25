@@ -24,6 +24,12 @@ export class Sidebar {
     return shape?.attrs?.type || shape?.className;
   });
 
+  // Method to determine if the panel should be shown
+  // Panel is shown only when a shape is selected and not in drawing mode
+  showPanel(): boolean {
+    return this.selectedShape() !== null && this.shapeService.getIsDrawing() === false;
+  }
+
   isLine = computed(() => {
     const type = this.shapeType();
     return type === 'line' || type === 'Line';
@@ -138,17 +144,32 @@ export class Sidebar {
     let shape = this.shapeService.getKonvaShape();
     if (!shape) return;
     // built in clone method
-    let clone = shape.clone();
+    const clone = shape.clone();
+    // **IMPORTANT: Remove all cloned event listeners**
+    clone.off('click');
+    clone.off('mousedown');
+    clone.off('dragend');
+    clone.off('transformend');
+    clone.off('styleChange');
+    // Replace id with new one
+    clone.id(this.generateId());
     // offset the cloned shape for visibility
     clone.x(clone.x() + 20);
     clone.y(clone.y() + 20);
+    // Add event listeners to the cloned shape
+    // Can be replaced with a method in ShapesLogic
+    this.shapeLogic.selectShape(clone);
     this.shapeLogic.onDrawingShape(clone);
     this.shapeLogic.onShapeDragEnd(clone);
     this.shapeLogic.onShapeTransformEnd(clone);
     this.shapeLogic.onShapeAttStyleChange(clone);
-    this.shapeLogic.selectShape(clone);
+    // Reset selection 
+    this.shapeService.setKonvaShape(null);
+    // Add the cloned shape to the layer
     shape.getLayer()?.add(clone);
     shape.getLayer()?.batchDraw();
+
+    this.shapeService.addToShapesArray(clone);
   }
 
   //TODO call backend to delete shape
@@ -162,7 +183,10 @@ export class Sidebar {
     // Don't forget to remove the destroyed shape from shapesArray
     // Add it to the service if needed (and that should be done in the service)
     // we can check the array later for destroyed shapes and remove them (not recommended)
+    this.shapeService.removeFromShapesArray(shape);
   }
 
-
+  generateId(): string {
+    return 'shape_' + crypto.randomUUID();
+  }
 }

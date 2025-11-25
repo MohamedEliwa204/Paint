@@ -48,6 +48,7 @@ export class DrawingCanvas implements AfterViewInit {
     this.initalizeKonva();
   }
 
+  // Deprecated SVG event handling code
   // private setupGlobalEvents() {
   //   if (!this.svg) {
   //     return;

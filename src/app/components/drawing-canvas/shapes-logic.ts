@@ -25,15 +25,17 @@ export class ShapesLogic {
 
     selectShape(shape: any) {
         shape.on("click", () => {
-            console.log("Shape clicked:", shape);
-            console.log("Currently selected shape:", this.shapeService.getKonvaShape());
+            // Toggle selection
+            // Keep in mind that getSelectedShape returns the shape type name
+            // while getKonvaShape returns the actual Konva shape object
+            // also keep or remove the isDrawing check based on your requirements
+            // here we keep it to avoid changing selection while drawing
             if (this.shapeService.getKonvaShape() === shape && !this.shapeService.getIsDrawing()) {
-                this.shapeService.setSelectedShape(null);
+                // this.shapeService.setSelectedShape(null);
+                this.shapeService.setKonvaShape(null);
                 console.log("Shape deselected");
-            } else {
+            } else if (!this.shapeService.getIsDrawing()) {
                 this.shapeService.setKonvaShape(shape);
-                console.log("Shape selected");
-                console.log("Newly selected shape:", this.shapeService.getKonvaShape());
             }
         });
     }
