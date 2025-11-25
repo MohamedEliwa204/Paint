@@ -1,11 +1,11 @@
-<div class="panel" *ngIf="selectedShape() as shape; else emptyState">
+<div class="panel" *ngIf="showPanel() as shape; else emptyState">
   <h3>Shape Properties</h3>
 
   <!-- Position Section -->
   <div class="section-header">Position</div>
 
   <div class="property-group">
-    <div class="input-wrapper input-with-unit" data-unit="px" *ngIf="!isLine() && !isFreeDraw()">
+    <div class="input-wrapper input-with-unit" data-unit="px">
       <label>X Position</label>
       <input
         type="number"
@@ -16,7 +16,7 @@
       />
     </div>
 
-    <div class="input-wrapper input-with-unit" data-unit="px" *ngIf="!isLine() && !isFreeDraw()">
+    <div class="input-wrapper input-with-unit" data-unit="px">
       <label>Y Position</label>
       <input
         type="number"
@@ -32,7 +32,7 @@
   <div class="section-header">Dimensions</div>
 
   <div class="property-group">
-    <!-- Rectangle/Square dimensions -->
+    <!-- Rectangle dimensions -->
     <div class="input-wrapper input-with-unit" data-unit="px" *ngIf="hasWidth()">
       <label>Width</label>
       <input
@@ -52,6 +52,47 @@
         aria-label="height"
         [value]="getValue('height')"
         (input)="update('height', $any($event.target).value)"
+        min="1"
+        step="1"
+      />
+    </div>
+
+    <!-- Square side -->
+    <div class="input-wrapper input-with-unit" data-unit="px" *ngIf="isSquare()">
+      <label>Side</label>
+      <input
+        type="number"
+        aria-label="side"
+        [value]="getValue('height')"
+        (input)="update('side', $any($event.target).value)"
+        min="1"
+        step="1"
+      />
+    </div>
+
+    <!-- Triangle side -->
+    <div class="input-wrapper input-with-unit" data-unit="px" *ngIf="isTriangle()">
+      <label>Side</label>
+      <input
+        type="number"
+        aria-label="side"
+        [value]="getValue('radius') * (2 * Math.sin(Math.PI / 3))"
+        (input)="update('side', $any($event.target).value)"
+        min="1"
+        step="1"
+      />
+    </div>
+
+    <!-- Line Length -->
+    <div class="input-wrapper input-with-unit" data-unit="px" *ngIf="isLine()">
+      <label>Length</label>
+      <input
+        type="range"
+        aria-label="length"
+        [min]="1"
+        [max]="1000"
+        [value]="getValue('length')"
+        (input)="update('length', $any($event.target).value)"
         min="1"
         step="1"
       />

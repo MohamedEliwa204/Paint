@@ -6,6 +6,7 @@ import { CircleShape } from '../../models/concreteClasses/circle-shape';
 import { ShapeStyles } from '../../models/dtos/shape.dto';
 import { BaseShape } from '../../models/concreteClasses/base-shape';
 import { PolygonShape } from '../../models/concreteClasses/polygon-shape';
+// Deprecated export file for exporting shapes to XML
 export class ExportXML {
     export(shapes: BaseShape[]) {
         let svgShapes = shapes.map(shape => shape.getXML());

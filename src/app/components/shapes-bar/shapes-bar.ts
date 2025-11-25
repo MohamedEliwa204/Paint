@@ -30,9 +30,9 @@ export class ShapesBar {
   // for Lines 
   lineCaps: ('butt' | 'round' | 'square')[] = ['butt', 'round', 'square'];
   strokeDashArrays: ([number, number])[] = [[4, 2], [8, 4], [2, 6]];
-  
-  public currentStyles: ShapeStyles = { stroke: '#000000', strokeWidth: 2, fill: '#ffffff', opacity: 1 , lineCap: 'butt', dash: []};
-  private shapeStyles: ShapeStyles = { stroke: '#000000', strokeWidth: 2, fill: '#ffffff', opacity: 1, lineCap: 'butt', dash: []};
+
+  public currentStyles: ShapeStyles = { stroke: '#000000', strokeWidth: 2, fill: '#ffffff', opacity: 1, lineCap: 'butt', dash: [] };
+  private shapeStyles: ShapeStyles = { stroke: '#000000', strokeWidth: 2, fill: '#ffffff', opacity: 1, lineCap: 'butt', dash: [] };
 
   // Deprecated code for svgs
   // private createShape(shapeName: string): BaseShape | null {
@@ -86,6 +86,9 @@ export class ShapesBar {
   }
 
   applyStyle(attr: keyof ShapeStyles, value: any) {
+    if (attr === 'strokeWidth' || attr === 'opacity') {
+      value = Number(value);
+    }
     this.currentStyles[attr] = value;
     this.shapeStyles[attr] = value;
     this.shapeService.setCurrentStyles(this.shapeStyles);

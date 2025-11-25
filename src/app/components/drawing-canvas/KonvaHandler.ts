@@ -14,9 +14,6 @@ export class KonvaHandler {
     private mockFactory = new MockShapeFactory();
     private shapeService: any;
     private isDrawingMode = false;
-    // Array to keep track of created shapes
-    private shapes: Konva.Shape[] = [];
-
     private shapeLogic: ShapesLogic;
 
     constructor(containerId: string, width: number, height: number, shapeService: any) {
@@ -55,12 +52,8 @@ export class KonvaHandler {
                 styles.dash = this.styles.dash.split(',').map((s: string) => Number(s.trim())).filter((n: number) => !isNaN(n)) || [];
             }
             const shapeType = this.shapeService.getSelectedShape();
-            console.log("Selected shape on mouse down:", shapeType);
-            console.log(this.styles);
-            console.log(styles.dash);
             if (shapeType) {
                 this.mockShape = this.mockFactory.createShape(shapeType as 'rectangle' | 'circle' | 'ellipse' | 'line' | 'square' | 'triangle' | 'free-draw', this.iniX, this.iniY, 0, 0, { ...styles });
-                console.log("Created mock shape:", this.mockShape);
                 if (this.mockShape) {
                     this.layer.add(this.mockShape);
                 }
@@ -141,7 +134,7 @@ export class KonvaHandler {
                 this.shapeLogic.onShapeAttStyleChange(this.mockShape);
                 // this.shapeLogic.onDraggingShape(this.mockShape);
                 this.layer.batchDraw();
-                this.shapes.push(this.mockShape);
+                this.shapeService.addToShapesArray(this.mockShape);
                 this.mockShape = undefined;
             }
         })

@@ -6,6 +6,7 @@ import { CircleShape } from '../../models/concreteClasses/circle-shape';
 import { ShapeStyles } from '../../models/dtos/shape.dto';
 import { BaseShape } from '../../models/concreteClasses/base-shape';
 import { PolygonShape } from '../../models/concreteClasses/polygon-shape';
+// Deprecated import file for importing shapes from JSON
 export class ImportJson {
     import(shapesJson: string) {
         let shapesArray: any[] = JSON.parse(shapesJson);

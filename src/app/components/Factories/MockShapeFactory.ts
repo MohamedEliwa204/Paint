@@ -17,7 +17,7 @@ export class MockShapeFactory {
         y: number,
         width: number,
         height: number,
-        styles: {[key: string]: any }
+        styles: { [key: string]: any }
     ): Konva.Shape | undefined {
         switch (type) {
             case 'rectangle':
@@ -30,12 +30,14 @@ export class MockShapeFactory {
                     stroke: 'blue',
                     strokeWidth: 2,
                     draggable: true,
+                    id: this.generateId(),
+                    type: 'rectangle',
                     ...styles
                 });
 
             case 'square':
                 return new Konva.Rect({
-                    x,    
+                    x,
                     y,
                     width,
                     height: width,
@@ -43,6 +45,8 @@ export class MockShapeFactory {
                     stroke: 'blue',
                     strokeWidth: 2,
                     draggable: true,
+                    id: this.generateId(),
+                    type: 'square',
                     ...styles
                 });
 
@@ -55,6 +59,8 @@ export class MockShapeFactory {
                     stroke: 'green',
                     strokeWidth: 2,
                     draggable: true,
+                    id: this.generateId(),
+                    type: 'circle',
                     ...styles
                 });
 
@@ -68,15 +74,23 @@ export class MockShapeFactory {
                     stroke: 'red',
                     strokeWidth: 2,
                     draggable: true,
+                    id: this.generateId(),
+                    type: 'ellipse',
                     ...styles
                 });
 
             case 'line':
                 return new Konva.Line({
+                    x: x,
+                    y: y,
+                    offsetX: x,
+                    offsetY: y,
                     points: [x, y, x, y], // start = end, will update dynamically
                     stroke: 'black',
                     strokeWidth: 2,
                     draggable: true,
+                    id: this.generateId(),
+                    type: 'line',
                     ...styles
                 });
 
@@ -90,18 +104,26 @@ export class MockShapeFactory {
                     stroke: 'orange',
                     strokeWidth: 2,
                     draggable: true,
+                    id: this.generateId(),
+                    type: 'triangle',
                     ...styles
                 });
-            case 'free-draw': 
-            return new Konva.Line({
-                points: [x, y], // start point, will update dynamically
-                stroke: 'black',
-                strokeWidth: 2,
-                draggable: true,
-                lineCap: 'round',
-                lineJoin: 'round',
-                ...styles
-            })    
+            case 'free-draw':
+                return new Konva.Line({
+                    x: x,
+                    y: y,
+                    offsetX: x,
+                    offsetY: y,
+                    points: [x, y], // start point, will update dynamically
+                    stroke: 'black',
+                    strokeWidth: 2,
+                    draggable: true,
+                    lineCap: 'round',
+                    lineJoin: 'round',
+                    id: this.generateId(),
+                    type: 'free-draw',
+                    ...styles
+                })
 
             // case 'triangle-non-eq':
             //     return new Konva.Line({
@@ -116,5 +138,9 @@ export class MockShapeFactory {
             default:
                 return undefined;
         }
+    }
+
+    generateId(): string {
+        return 'shape_' + crypto.randomUUID();
     }
 }

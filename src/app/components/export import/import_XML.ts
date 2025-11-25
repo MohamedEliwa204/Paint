@@ -7,6 +7,7 @@ import { ShapeStyles } from '../../models/dtos/shape.dto';
 import { BaseShape } from '../../models/concreteClasses/base-shape';
 import { PolygonShape } from '../../models/concreteClasses/polygon-shape';
 const defaultStyleKeys = ["stroke", "strokeWidth", "fill", "opacity", "strokeDashArray"];
+// Deprecated import file for importing shapes from XML
 export class ImportXML {
     import(xml: string) {
         let tagsArray = xml.split("\n");
