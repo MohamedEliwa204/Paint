@@ -81,5 +81,22 @@ export class ShapesLogic {
         });
     }
 
+    // onDraggingShape(shape: any) {
+    //     shape.dragBoundFunc((pos: { x: number, y: number }) => {
+    //         const stage = shape.getStage();
+    //         if (!stage) return pos;
+    //         const width = shape.width() || shape.radius() * 2 || 0;
+    //         const height = shape.height() || shape.radius() * 2 || 0;
+
+    //         const stageWidth = shape.getStage()!.width();
+    //         const stageHeight = shape.getStage()!.height();
+
+    //         return {
+    //             x: Math.max(0, Math.min(pos.x, stageWidth - width)),
+    //             y: Math.max(0, Math.min(pos.y, stageHeight - height)),
+    //         };
+    //     })
+    // }
+
 
 }

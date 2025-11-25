@@ -1,6 +1,12 @@
 import { ShapeDto, ShapeType } from '../dtos/shape.dto';
 import { ShapeStyles } from '../dtos/shape.dto';
 
+// Deprecated classes don't use them 
+// They are kept for backward compatibility
+// and may be removed in future versions
+// Use Konva shapes instead
+// They introduced initialy for svg but currently 
+// Konva is used for rendering shapes
 export abstract class BaseShape implements ShapeDto {
 
   id: string;
@@ -90,8 +96,8 @@ export abstract class BaseShape implements ShapeDto {
    */
   startResize(pointX: number, pointY: number, handle: string | null): void {
     this._activeResizeHandle = handle;
-    this._resizeStart = {x: this.x, y: this.y, width: this.width, height: this.height};
-    this._resizeOffset = {x: pointX, y: pointY};
+    this._resizeStart = { x: this.x, y: this.y, width: this.width, height: this.height };
+    this._resizeOffset = { x: pointX, y: pointY };
 
   };
 

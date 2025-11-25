@@ -2,6 +2,13 @@ import {EllipseDto} from '../dtos/ellipse.dto';
 import {BaseShape} from './base-shape';
 import {ShapeDto} from '../dtos/shape.dto';
 
+// Deprecated classes don't use them 
+// They are kept for backward compatibility
+// and may be removed in future versions
+// Use Konva shapes instead
+// They introduced initialy for svg but currently 
+// Konva is used for rendering shapes
+
 export class EllipseShape<T extends ShapeDto = EllipseDto> extends BaseShape {
 
 

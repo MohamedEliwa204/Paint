@@ -1,6 +1,13 @@
 import {EllipseShape} from './ellipse-shape';
 import {CircleDto} from '../dtos/circle.dto';
 
+// Deprecated classes don't use them 
+// They are kept for backward compatibility
+// and may be removed in future versions
+// Use Konva shapes instead
+// They introduced initialy for svg but currently 
+// Konva is used for rendering shapes
+
 export class CircleShape extends EllipseShape<CircleDto> implements CircleDto{
   override type = 'circle' as const;
   r?: number;

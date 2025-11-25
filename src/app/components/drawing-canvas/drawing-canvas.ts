@@ -41,119 +41,119 @@ export class DrawingCanvas implements AfterViewInit {
   }
 
   ngAfterViewInit() {
-    this.svg = this.elementRef.nativeElement.querySelector('#canvas');
-    if (this.svg) {
-      this.setupGlobalEvents();
-    }
+    // this.svg = this.elementRef.nativeElement.querySelector('#canvas');
+    // if (this.svg) {
+    //   this.setupGlobalEvents();
+    // }
     this.initalizeKonva();
   }
 
-  private setupGlobalEvents() {
-    if (!this.svg) {
-      return;
-    }
-    this.svg.addEventListener('mousedown', (event) => this.onMouseDown(event));
-    this.svg.addEventListener('mousemove', (event) => this.onMouseMove(event));
-    this.svg.addEventListener('mouseup', () => this.onMouseUp());
-    this.svg.addEventListener('mouseleave', () => this.onMouseUp());
+  // private setupGlobalEvents() {
+  //   if (!this.svg) {
+  //     return;
+  //   }
+  //   this.svg.addEventListener('mousedown', (event) => this.onMouseDown(event));
+  //   this.svg.addEventListener('mousemove', (event) => this.onMouseMove(event));
+  //   this.svg.addEventListener('mouseup', () => this.onMouseUp());
+  //   this.svg.addEventListener('mouseleave', () => this.onMouseUp());
 
-  }
+  // }
 
-  private toSvgPoint(event: MouseEvent) {
-    if (!this.svg) throw new Error('svg missing');
-    const pt = this.svg.createSVGPoint();
-    pt.x = event.clientX;
-    pt.y = event.clientY;
-    return pt.matrixTransform(this.svg.getScreenCTM()!.inverse());
-  }
-
-
-  private onMouseDown(event: MouseEvent) {
-    if (!this.svg) {
-      return;
-    }
-    const target = event.target as SVGGraphicsElement;
-
-    const svgPoint = this.toSvgPoint(event);
-    const shape = this.selectedShape;
-    // give the shapes this class
-    if (target.classList.contains('resize-handle')) {
-      if (shape) {
-        this.isResizing = true;
-        // Get which handle was clicked
-        this.activeResizeHandle = target.getAttribute('data-position');
-
-        shape.startResize(svgPoint.x, svgPoint.y, this.activeResizeHandle);
-      }
-      event.stopPropagation(); //  don't start dragging too
-      return;
-    }
-
-    if (target !== this.svg && target.tagName !== 'svg') {
-      const shape = this.selectedShape;
-      this.isDragging = true;
-      this.selectedElement = target;
-
-      const svgPoint = this.toSvgPoint(event);
-
-      if (shape) {
-        shape.startDrag(svgPoint.x, svgPoint.y);
-      }
-      target.style.cursor = 'grabbing';
-      target.style.opacity = '0.7';
-    }
-
-    if (target.tagName === 'svg' || target.id === 'canvas') {
-      // This makes the handles disappear
-      this.shapeService.setSelectedShape(null);
-      this.isDragging = false;
-      this.isResizing = false;
-      this.selectedElement = null;
-    }
-
-  }
-
-  private onMouseMove(event: MouseEvent) {
-    if (!this.svg) return;
-    const shape = this.selectedShape;
-    const svgPoint = this.toSvgPoint(event);
+  // private toSvgPoint(event: MouseEvent) {
+  //   if (!this.svg) throw new Error('svg missing');
+  //   const pt = this.svg.createSVGPoint();
+  //   pt.x = event.clientX;
+  //   pt.y = event.clientY;
+  //   return pt.matrixTransform(this.svg.getScreenCTM()!.inverse());
+  // }
 
 
-    if (!shape) {
-      return;
-    }
-    if (this.isResizing) {
-      shape.resizing(svgPoint.x, svgPoint.y);
-      return;
-    }
+  // private onMouseDown(event: MouseEvent) {
+  //   if (!this.svg) {
+  //     return;
+  //   }
+  //   const target = event.target as SVGGraphicsElement;
+
+  //   const svgPoint = this.toSvgPoint(event);
+  //   const shape = this.selectedShape;
+  //   // give the shapes this class
+  //   if (target.classList.contains('resize-handle')) {
+  //     if (shape) {
+  //       this.isResizing = true;
+  //       // Get which handle was clicked
+  //       this.activeResizeHandle = target.getAttribute('data-position');
+
+  //       shape.startResize(svgPoint.x, svgPoint.y, this.activeResizeHandle);
+  //     }
+  //     event.stopPropagation(); //  don't start dragging too
+  //     return;
+  //   }
+
+  //   if (target !== this.svg && target.tagName !== 'svg') {
+  //     const shape = this.selectedShape;
+  //     this.isDragging = true;
+  //     this.selectedElement = target;
+
+  //     const svgPoint = this.toSvgPoint(event);
+
+  //     if (shape) {
+  //       shape.startDrag(svgPoint.x, svgPoint.y);
+  //     }
+  //     target.style.cursor = 'grabbing';
+  //     target.style.opacity = '0.7';
+  //   }
+
+  //   if (target.tagName === 'svg' || target.id === 'canvas') {
+  //     // This makes the handles disappear
+  //     this.shapeService.setSelectedShape(null);
+  //     this.isDragging = false;
+  //     this.isResizing = false;
+  //     this.selectedElement = null;
+  //   }
+
+  // }
+
+  // private onMouseMove(event: MouseEvent) {
+  //   if (!this.svg) return;
+  //   const shape = this.selectedShape;
+  //   const svgPoint = this.toSvgPoint(event);
 
 
-    if (this.isDragging && this.selectedElement) {
-      shape.dragTo(svgPoint.x, svgPoint.y);
-      shape.applyPositionToElement(this.selectedElement);
-    }
+  //   if (!shape) {
+  //     return;
+  //   }
+  //   if (this.isResizing) {
+  //     shape.resizing(svgPoint.x, svgPoint.y);
+  //     return;
+  //   }
 
 
-  }
-
-  private onMouseUp() {
-
-    const shape = this.selectedShape;
-    if (this.isResizing) {
-      if (shape) shape.endResizing();
-      this.isResizing = false;
-      this.activeResizeHandle = null;
-    }
+  //   if (this.isDragging && this.selectedElement) {
+  //     shape.dragTo(svgPoint.x, svgPoint.y);
+  //     shape.applyPositionToElement(this.selectedElement);
+  //   }
 
 
-    if (this.isDragging && this.selectedElement) {
-      if (shape) shape.endDrag();
-      this.selectedElement.style.cursor = 'grab';
-      this.selectedElement.style.opacity = '1';
-      this.isDragging = false;
-      this.selectedElement = null;
-    }
-  }
+  // }
+
+  // private onMouseUp() {
+
+  //   const shape = this.selectedShape;
+  //   if (this.isResizing) {
+  //     if (shape) shape.endResizing();
+  //     this.isResizing = false;
+  //     this.activeResizeHandle = null;
+  //   }
+
+
+  //   if (this.isDragging && this.selectedElement) {
+  //     if (shape) shape.endDrag();
+  //     this.selectedElement.style.cursor = 'grab';
+  //     this.selectedElement.style.opacity = '1';
+  //     this.isDragging = false;
+  //     this.selectedElement = null;
+  //   }
+  // }
 
   initalizeKonva() {
     const containerEl = document.getElementById('mock-canvas')!;

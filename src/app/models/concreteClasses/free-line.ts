@@ -2,6 +2,13 @@ import { ShapeDto } from "../dtos/shape.dto";
 import { BaseShape } from "./base-shape";
 
 // FreeLine represents a freehand drawn line with multiple points
+
+// Deprecated classes don't use them 
+// They are kept for backward compatibility
+// and may be removed in future versions
+// Use Konva shapes instead
+// They introduced initialy for svg but currently 
+// Konva is used for rendering shapes
 export class FreeLine extends BaseShape {
     override type = 'free-draw' as const;
     points: { x: number; y: number }[] = [];

@@ -30,8 +30,8 @@ export class KonvaHandler {
         this.onMouseUp();
     }
 
-    get selectedShape() {
-        return this.shapeService.selectedShape();
+    get selectedShapeType() {
+        return this.shapeService.getSelectedShape();
     }
 
     get styles() {
@@ -50,15 +50,17 @@ export class KonvaHandler {
             if (!Position || !this.isDrawing) return;
             this.iniX = Position.x;
             this.iniY = Position.y;
-            let styles = this.selectedShape.shapeStyles;
+            let styles = this.styles || {};
             if (this.styles.dash && typeof this.styles.dash === 'string') {
                 styles.dash = this.styles.dash.split(',').map((s: string) => Number(s.trim())).filter((n: number) => !isNaN(n)) || [];
             }
-            const shape = this.selectedShape;
-            console.log(styles.dash);
+            const shapeType = this.shapeService.getSelectedShape();
+            console.log("Selected shape on mouse down:", shapeType);
             console.log(this.styles);
-            if (shape) {
-                this.mockShape = this.mockFactory.createShape(shape.type as 'rectangle' | 'circle' | 'ellipse' | 'line' | 'square' | 'triangle' | 'free-draw', this.iniX, this.iniY, 0, 0, { ...styles });
+            console.log(styles.dash);
+            if (shapeType) {
+                this.mockShape = this.mockFactory.createShape(shapeType as 'rectangle' | 'circle' | 'ellipse' | 'line' | 'square' | 'triangle' | 'free-draw', this.iniX, this.iniY, 0, 0, { ...styles });
+                console.log("Created mock shape:", this.mockShape);
                 if (this.mockShape) {
                     this.layer.add(this.mockShape);
                 }
@@ -77,7 +79,7 @@ export class KonvaHandler {
             let height = Math.abs(this.finY - this.iniY);
             let x = Math.min(this.finX, this.iniX);
             let y = Math.min(this.finY, this.iniY);
-            let type = this.selectedShape?.type;
+            let type = this.shapeService.getSelectedShape();
             if (type === 'rectangle') {
                 this.mockShape.x(x);
                 this.mockShape.y(y);
@@ -137,6 +139,7 @@ export class KonvaHandler {
                 this.shapeLogic.onShapeDragEnd(this.mockShape);
                 this.shapeLogic.onShapeTransformEnd(this.mockShape);
                 this.shapeLogic.onShapeAttStyleChange(this.mockShape);
+                // this.shapeLogic.onDraggingShape(this.mockShape);
                 this.layer.batchDraw();
                 this.shapes.push(this.mockShape);
                 this.mockShape = undefined;
