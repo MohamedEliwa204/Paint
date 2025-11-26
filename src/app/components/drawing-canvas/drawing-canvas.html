@@ -1,61 +1,9 @@
-<!-- 
-<svg id="canvas">
-  <circle
-    *ngIf="selectedShape?.type === 'circle'"
-    r="45"
-    cx="50"
-    cy="50"
-    fill="red"
-    stroke="green"
-    stroke-width="3"
-    opacity="1"
-    style="cursor: grab;"
-  />
-  <rect
-    *ngIf="selectedShape?.type === 'rectangle'"
-    width="300"
-    height="100"
-    x="10"
-    y="10"
-    style="fill:rgb(0,0,255);stroke-width:3;stroke:red;cursor:grab;"
-  />
-  <rect
-    *ngIf="selectedShape?.type === 'square'"
-    width="200"
-    height="200"
-    x="10"
-    y="10"
-    style="fill:rgb(0,0,255);stroke-width:3;stroke:red;cursor:grab;"
-  />
-
-  <ellipse
-    *ngIf="selectedShape?.type === 'ellipse'"
-    rx="100" ry="50" cx="120" cy="80"
-    style="fill:yellow;stroke:green;stroke-width:3;cursor:grab;"
-  />
-
-  <polygon *ngIf="selectedShape?.type === 'triangle'"
-             points="100,20 40,180 160,180"
-             fill="orange"
-             stroke="black"
-             stroke-width="3"
-             style="cursor:grab;"
-  />
-
-  <line
-    *ngIf="selectedShape?.type === 'line'"
-    x1="0" y1="0"
-    x2="300" y2="200"
-    style="stroke:red;stroke-width:2;cursor:grab;"
-  />
-
-</svg> -->
 <main>
   <div id="mock-canvas"></div>
 
   <div 
     id="floating-menu" 
-    *ngIf="selectedShape" 
+    *ngIf="hasSelection" 
     [style.top.px]="menuPosition.y" 
     [style.left.px]="menuPosition.x"
   >

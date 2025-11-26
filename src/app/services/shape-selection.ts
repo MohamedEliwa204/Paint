@@ -7,6 +7,7 @@ import Konva from 'konva';
   providedIn: 'root',
 })
 export class ShapeSelection {
+  selectedKonvaShapes: WritableSignal<Konva.Shape[]> = signal<Konva.Shape[]>([]);
   private mainLayer: Konva.Layer | null = null;
   selectedShape: WritableSignal<string | null> = signal<string | null>(null);
   isDrawing: WritableSignal<boolean> = signal<boolean>(false);
@@ -59,5 +60,11 @@ export class ShapeSelection {
     this.shapeArray = this.shapeArray.filter(element => element != shape) ;
     console.log(this.shapeArray)
   }
+getSelectedShapes() {
+    return this.selectedKonvaShapes();
+  }
 
+  setSelectedShapes(shapes: Konva.Shape[]) {
+    this.selectedKonvaShapes.set(shapes);
+  }
 }
