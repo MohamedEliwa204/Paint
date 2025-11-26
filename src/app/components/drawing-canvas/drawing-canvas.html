@@ -51,8 +51,31 @@
 
 </svg> -->
 <main>
-  <div id="mock-canvas">
+  <div id="mock-canvas"></div>
+
+  <div 
+    id="floating-menu" 
+    *ngIf="selectedShape" 
+    [style.top.px]="menuPosition.y" 
+    [style.left.px]="menuPosition.x"
+  >
+    <div class="text-actions" *ngIf="isText()">
+        <button (click)="toggleStyle('bold')" [class.active]="isBold()" title="Bold">B</button>
+        <button (click)="toggleStyle('italic')" [class.active]="isItalic()" title="Italic">I</button>
+        <button (click)="toggleStyle('underline')" [class.active]="isUnderline()" title="Underline">U</button>
+        
+        <input 
+          type="number" 
+          [value]="fontSize()" 
+          (input)="updateFontSize($any($event.target).value)" 
+          title="Font Size"
+          style="width: 50px;"
+        >
+        <span class="separator">|</span>
+    </div>
+
+    <button (click)="duplicate()" title="Duplicate">❐</button>
+    <button (click)="delete()" title="Delete" class="delete-btn">🗑️</button>
   </div>
-  <div id="svg-container"></div>
 
 </main>

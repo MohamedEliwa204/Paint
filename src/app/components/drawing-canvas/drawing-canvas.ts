@@ -1,175 +1,153 @@
-import { Component, inject, AfterViewInit, ElementRef, effect } from '@angular/core';import { ShapeSelection } from '../../services/shape-selection';
+import { Component, inject, AfterViewInit, ElementRef, effect, ChangeDetectorRef } from '@angular/core';
+import { ShapeSelection } from '../../services/shape-selection';
 import { NgIf } from '@angular/common';
-import Konva from 'konva';
-import { Line } from 'konva/lib/shapes/Line';
-import { Container } from 'konva/lib/Container';
-import { MockShapeFactory } from '../Factories/MockShapeFactory';
 import { KonvaHandler } from './KonvaHandler';
+import { ShapesLogic } from './shapes-logic';
 
 @Component({
   selector: 'app-drawing-canvas',
-  imports: [
-    NgIf
-  ],
+  imports: [NgIf],
   templateUrl: './drawing-canvas.html',
   styleUrl: './drawing-canvas.css',
 })
 export class DrawingCanvas implements AfterViewInit {
   private readonly shapeService = inject(ShapeSelection);
   private readonly elementRef = inject(ElementRef);
+  private readonly cdr = inject(ChangeDetectorRef);
 
-  private svg: SVGSVGElement | null = null;
-  private selectedElement: SVGGraphicsElement | null = null;
-
-  private isDragging = false;
-  private isResizing = false;
-  private activeResizeHandle: string | null = null;
-
-  private iniX: number = 0;
-  private iniY: number = 0;
-  private finX: number = 0;
-  private finY: number = 0;
-  private mockShape: any = null;
-
-  private mockFactory = new MockShapeFactory();
+  menuPosition = { x: 0, y: 0 };
+  selectedShape: any = null;
   private konvaHandler: KonvaHandler | null = null;
-
+  private shapesLogic: ShapesLogic;
 
   constructor() {
+    this.shapesLogic = new ShapesLogic(this.shapeService);
+
     effect(() => {
-      const selectedShape = this.shapeService.getKonvaShape();
+      const shape = this.shapeService.getKonvaShape();
+      this.selectedShape = shape;
+
       if (this.konvaHandler) {
-        this.konvaHandler.updateSelection(selectedShape);
+        this.konvaHandler.updateSelection(shape);
+      }
+
+      if (shape) {
+        this.updateMenuPosition(shape);
+        shape.off('dragmove.menu transform.menu');
+        
+        shape.on('dragmove.menu transform.menu', () => {
+          this.updateMenuPosition(shape);
+          this.cdr.detectChanges();
+        });
       }
     });
   }
 
-
-  get selectedShape() {
-    return this.shapeService.selectedShape();
-  }
-
   ngAfterViewInit() {
-    // this.svg = this.elementRef.nativeElement.querySelector('#canvas');
-    // if (this.svg) {
-    //   this.setupGlobalEvents();
-    // }
     this.initalizeKonva();
   }
-
-  // Deprecated SVG event handling code
-  // private setupGlobalEvents() {
-  //   if (!this.svg) {
-  //     return;
-  //   }
-  //   this.svg.addEventListener('mousedown', (event) => this.onMouseDown(event));
-  //   this.svg.addEventListener('mousemove', (event) => this.onMouseMove(event));
-  //   this.svg.addEventListener('mouseup', () => this.onMouseUp());
-  //   this.svg.addEventListener('mouseleave', () => this.onMouseUp());
-
-  // }
-
-  // private toSvgPoint(event: MouseEvent) {
-  //   if (!this.svg) throw new Error('svg missing');
-  //   const pt = this.svg.createSVGPoint();
-  //   pt.x = event.clientX;
-  //   pt.y = event.clientY;
-  //   return pt.matrixTransform(this.svg.getScreenCTM()!.inverse());
-  // }
-
-
-  // private onMouseDown(event: MouseEvent) {
-  //   if (!this.svg) {
-  //     return;
-  //   }
-  //   const target = event.target as SVGGraphicsElement;
-
-  //   const svgPoint = this.toSvgPoint(event);
-  //   const shape = this.selectedShape;
-  //   // give the shapes this class
-  //   if (target.classList.contains('resize-handle')) {
-  //     if (shape) {
-  //       this.isResizing = true;
-  //       // Get which handle was clicked
-  //       this.activeResizeHandle = target.getAttribute('data-position');
-
-  //       shape.startResize(svgPoint.x, svgPoint.y, this.activeResizeHandle);
-  //     }
-  //     event.stopPropagation(); //  don't start dragging too
-  //     return;
-  //   }
-
-  //   if (target !== this.svg && target.tagName !== 'svg') {
-  //     const shape = this.selectedShape;
-  //     this.isDragging = true;
-  //     this.selectedElement = target;
-
-  //     const svgPoint = this.toSvgPoint(event);
-
-  //     if (shape) {
-  //       shape.startDrag(svgPoint.x, svgPoint.y);
-  //     }
-  //     target.style.cursor = 'grabbing';
-  //     target.style.opacity = '0.7';
-  //   }
-
-  //   if (target.tagName === 'svg' || target.id === 'canvas') {
-  //     // This makes the handles disappear
-  //     this.shapeService.setSelectedShape(null);
-  //     this.isDragging = false;
-  //     this.isResizing = false;
-  //     this.selectedElement = null;
-  //   }
-
-  // }
-
-  // private onMouseMove(event: MouseEvent) {
-  //   if (!this.svg) return;
-  //   const shape = this.selectedShape;
-  //   const svgPoint = this.toSvgPoint(event);
-
-
-  //   if (!shape) {
-  //     return;
-  //   }
-  //   if (this.isResizing) {
-  //     shape.resizing(svgPoint.x, svgPoint.y);
-  //     return;
-  //   }
-
-
-  //   if (this.isDragging && this.selectedElement) {
-  //     shape.dragTo(svgPoint.x, svgPoint.y);
-  //     shape.applyPositionToElement(this.selectedElement);
-  //   }
-
-
-  // }
-
-  // private onMouseUp() {
-
-  //   const shape = this.selectedShape;
-  //   if (this.isResizing) {
-  //     if (shape) shape.endResizing();
-  //     this.isResizing = false;
-  //     this.activeResizeHandle = null;
-  //   }
-
-
-  //   if (this.isDragging && this.selectedElement) {
-  //     if (shape) shape.endDrag();
-  //     this.selectedElement.style.cursor = 'grab';
-  //     this.selectedElement.style.opacity = '1';
-  //     this.isDragging = false;
-  //     this.selectedElement = null;
-  //   }
-  // }
 
   initalizeKonva() {
     const containerEl = document.getElementById('mock-canvas')!;
     this.konvaHandler = new KonvaHandler('mock-canvas', containerEl.clientWidth, containerEl.clientHeight, this.shapeService);
   }
 
+  updateMenuPosition(shape: any) {
+    const stage = shape.getStage();
+    if (!stage) return;
 
+    const box = shape.getClientRect({ relativeTo: stage.container() });
+    
+    this.menuPosition = {
+      x: box.x + box.width / 2,
+      y: box.y - 10
+    };
+  }
 
+  isText() {
+    return this.selectedShape?.getClassName() === 'Text';
+  }
+
+  fontSize() {
+    return this.selectedShape?.fontSize() || 16;
+  }
+
+  isBold() {
+    const style = (this.selectedShape?.fontStyle() || '');
+    return style.includes('bold');
+  }
+
+  isItalic() {
+    const style = (this.selectedShape?.fontStyle() || '');
+    return style.includes('italic');
+  }
+
+  isUnderline() {
+    return this.selectedShape?.textDecoration() === 'underline';
+  }
+
+  duplicate() {
+    if (!this.selectedShape) return;
+    
+    const clone = this.selectedShape.clone();
+    clone.x(clone.x() + 20);
+    clone.y(clone.y() + 20);
+    clone.id('shape_' + crypto.randomUUID());
+
+    clone.off(); 
+    this.shapesLogic.selectShape(clone);
+    this.shapesLogic.onDrawingShape(clone);
+    this.shapesLogic.onShapeDragEnd(clone);
+    this.shapesLogic.onShapeTransformEnd(clone);
+    this.shapesLogic.onShapeAttStyleChange(clone);
+
+    const layer = this.selectedShape.getLayer();
+    layer?.add(clone);
+    layer?.batchDraw();
+
+    this.shapeService.setKonvaShape(clone);
+    this.shapeService.addToShapesArray(clone);
+  }
+
+  delete() {
+    if (!this.selectedShape) return;
+    
+    const layer = this.selectedShape.getLayer();
+    this.selectedShape.destroy();
+    this.shapeService.setKonvaShape(null);
+    layer?.batchDraw();
+  }
+
+  toggleStyle(type: 'bold' | 'italic' | 'underline') {
+    if (!this.selectedShape || !this.isText()) return;
+
+    if (type === 'underline') {
+      const current = this.selectedShape.textDecoration();
+      this.selectedShape.textDecoration(current === 'underline' ? '' : 'underline');
+    } else {
+      let style = this.selectedShape.fontStyle() || 'normal';
+      let hasBold = style.includes('bold');
+      let hasItalic = style.includes('italic');
+
+      if (type === 'bold') hasBold = !hasBold;
+      if (type === 'italic') hasItalic = !hasItalic;
+
+      let newStyle = 'normal';
+      if (hasBold && hasItalic) newStyle = 'italic bold';
+      else if (hasBold) newStyle = 'bold';
+      else if (hasItalic) newStyle = 'italic';
+
+      this.selectedShape.fontStyle(newStyle);
+    }
+    this.selectedShape.getLayer()?.batchDraw();
+  }
+
+  updateFontSize(val: any) {
+    if (!this.selectedShape || !this.isText()) return;
+    const size = Number(val);
+    if (!isNaN(size) && size > 0) {
+      this.selectedShape.fontSize(size);
+      this.selectedShape.getLayer()?.batchDraw();
+    }
+  }
 }
