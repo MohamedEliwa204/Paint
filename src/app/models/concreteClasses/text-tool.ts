@@ -49,7 +49,7 @@ export class TextTool {
     textarea.style.position = 'absolute';
     textarea.style.top = areaPosition.y + 'px';
     textarea.style.left = areaPosition.x + 'px';
-    textarea.style.width = (textNode.width() - textNode.padding() * 2) + 50 + 'px'; // وسعنا العرض شوية
+    textarea.style.width = (textNode.width() - textNode.padding() * 2) + 50 + 'px'; 
     textarea.style.height = textNode.height() + 20 + 'px';
     textarea.style.fontSize = textNode.fontSize() + 'px';
     textarea.style.border = '1px dashed #3b82f6';
