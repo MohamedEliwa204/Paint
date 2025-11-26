@@ -19,9 +19,8 @@ div {
   border: 1px solid #e2e8f0;
   justify-content: center;
   align-items: center;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08),
-              0 4px 10px rgba(0, 0, 0, 0.04),
-              inset 0 1px 0 rgba(255, 255, 255, 0.9);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08), 0 4px 10px rgba(0, 0, 0, 0.04),
+    inset 0 1px 0 rgba(255, 255, 255, 0.9);
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
@@ -43,7 +42,7 @@ div {
 }
 
 /* Style inputs */
-.styles input[type="color"] {
+.styles input[type='color'] {
   width: 36px;
   height: 36px;
   border: 2px solid #e2e8f0;
@@ -53,7 +52,7 @@ div {
   padding: 2px;
 }
 
-.styles input[type="color"]:hover {
+.styles input[type='color']:hover {
   border-color: #4299e1;
   box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.1);
 }
@@ -94,8 +93,7 @@ button {
   justify-content: center;
   transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
   color: #475569;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04),
-              0 1px 2px rgba(0, 0, 0, 0.06);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.06);
   padding: 0;
   position: relative;
   overflow: hidden;
@@ -133,8 +131,7 @@ button:hover {
   background: linear-gradient(145deg, #f8fafc, #ffffff);
   border-color: #3b82f6;
   transform: translateY(-3px) scale(1.05);
-  box-shadow: 0 8px 16px rgba(59, 130, 246, 0.25),
-              0 4px 8px rgba(59, 130, 246, 0.15);
+  box-shadow: 0 8px 16px rgba(59, 130, 246, 0.25), 0 4px 8px rgba(59, 130, 246, 0.15);
 }
 
 button:hover svg {
@@ -152,17 +149,15 @@ button.selected {
   background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
   border-color: #2563eb;
   color: #ffffff;
-  box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4),
-              0 3px 10px rgba(59, 130, 246, 0.3),
-              inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4), 0 3px 10px rgba(59, 130, 246, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
   transform: translateY(-2px);
 }
 
 button.selected:hover {
   background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
   transform: translateY(-3px) scale(1.05);
-  box-shadow: 0 10px 25px rgba(59, 130, 246, 0.5),
-              0 5px 12px rgba(59, 130, 246, 0.35);
+  box-shadow: 0 10px 25px rgba(59, 130, 246, 0.5), 0 5px 12px rgba(59, 130, 246, 0.35);
 }
 
 button.selected svg {
@@ -205,19 +200,26 @@ button[title]:hover::after {
     flex-direction: column;
     gap: 16px;
   }
-  
+
   div {
     width: 100%;
     justify-content: flex-start;
     overflow-x: auto;
   }
-  
+
   .styles {
     flex-wrap: wrap;
   }
-  
+
   button {
     width: 44px;
     height: 44px;
   }
+}
+
+.menu-wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }

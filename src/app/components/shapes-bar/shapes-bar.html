@@ -1,12 +1,35 @@
 <main>
- <button mat-button [matMenuTriggerFor]="fileMenu">File</button>
+  <button mat-button [matMenuTriggerFor]="fileMenu">File</button>
 
-  <mat-menu #fileMenu="matMenu" >
-    <button mat-menu-item (click)="onNew()" style="width: 100px;">New</button>
-    
-    <button mat-menu-item (click)="fileInput1.click()" style="width: 100px;">Import</button>
+  <mat-menu #fileMenu="matMenu">
+    <div class="menu-wrapper">
+      <button
+        mat-menu-item
+        class="menu-item"
+        (click)="onNew()"
+        style="width: 100px; text-align: center"
+      >
+        New
+      </button>
 
-    <button mat-menu-item (click)="onExportJson()" style="width: 100px;">Export</button>
+      <button
+        mat-menu-item
+        class="menu-item"
+        (click)="fileInput1.click()"
+        style="width: 100px; text-align: center"
+      >
+        Import
+      </button>
+
+      <button
+        mat-menu-item
+        class="menu-item"
+        (click)="onExportJson()"
+        style="width: 100px; text-align: center"
+      >
+        Export
+      </button>
+    </div>
   </mat-menu>
   <input
     type="file"
@@ -15,16 +38,14 @@
     (change)="onImportJson($event)"
     accept=".json"
   />
-  <input 
-    type="file" 
-    #fileInput 
-    style="display: none" 
-    (change)="onImageSelected($event)" 
+  <input
+    type="file"
+    #fileInput
+    style="display: none"
+    (change)="onImageSelected($event)"
     accept="image/*"
-  >
-  <button (click)="fileInput.click()" style="width: 100px;">
-    Add Image
-  </button>
+  />
+  <button (click)="fileInput.click()" style="width: 100px">Add Image</button>
   <div>
     <button (click)="onClick('circle')" [class.selected]="isSelected('circle')" title="Circle">
       <svg width="28" height="28" viewBox="0 0 28 28">
@@ -171,14 +192,10 @@
     <!-- Stroke Dash Array -->
     <label title="Dash Style">
       Dash:
-      <select
-        [(ngModel)]="currentStyles.dash"
-        (change)="applyStyle('dash', currentStyles.dash)"
-      >
+      <select [(ngModel)]="currentStyles.dash" (change)="applyStyle('dash', currentStyles.dash)">
         <option value="">solid</option>
         <option *ngFor="let dash of strokeDashArrays" [value]="dash">{{ dash }}</option>
       </select>
     </label>
   </div>
-
 </main>
