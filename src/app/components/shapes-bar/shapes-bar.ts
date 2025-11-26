@@ -119,7 +119,7 @@ export class ShapesBar {
     const file = event.target.files[0];
     if (file) {
       this.jsonTool.importCanvas(file);
-      event.target.value = '';
+      event.target.value = ''; 
     }
   }
 
