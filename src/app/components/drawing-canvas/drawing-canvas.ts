@@ -38,6 +38,8 @@ export class DrawingCanvas implements AfterViewInit {
   constructor() {
     effect(() => {
       const selectedShape = this.shapeService.getKonvaShape();
+      const selectedShapes = this.shapeService.getSelectedShapes();
+      console.log('Effect triggered - selectedShapes:', selectedShapes.length, 'selectedShape:', selectedShape);
       if (this.konvaHandler) {
         this.konvaHandler.updateSelection(selectedShape);
       }
