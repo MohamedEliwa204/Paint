@@ -188,4 +188,7 @@ onAddText() {
       layer.batchDraw();
     }
   }
+  onExportImage() {
+    this.jsonTool.exportAsImage();
+  }
 }

@@ -9,7 +9,7 @@ export class JsonTool {
     private shapeService: ShapeSelection
   ) {}
 
-  exportCanvas() {
+  async exportCanvas() {
     const layer = this.shapeService.getMainLayer();
     if (!layer) return;
 
@@ -27,16 +27,35 @@ export class JsonTool {
     systemNodes.forEach(node => layer.add(node));
 
     const blob = new Blob([json], { type: 'application/json' });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    
-    const date = new Date().toISOString().slice(0, 19).replace(/:/g, "-");
-    link.download = `whiteboard-backup-${date}.json`;
-    link.href = url;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    URL.revokeObjectURL(url);
+    const filename = `whiteboard-backup-${new Date().toISOString().slice(0, 19).replace(/:/g, "-")}.json`;
+
+    try {
+        if ('showSaveFilePicker' in window) {
+            const handle = await (window as any).showSaveFilePicker({
+                suggestedName: filename,
+                types: [{
+                    description: 'JSON Whiteboard File',
+                    accept: { 'application/json': ['.json'] },
+                }],
+            });
+            const writable = await handle.createWritable();
+            await writable.write(blob);
+            await writable.close();
+        } else {
+            throw new Error("API not supported");
+        }
+    } catch (err) {
+        if ((err as any).name !== 'AbortError') {
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.download = filename;
+            link.href = url;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(url);
+        }
+    }
 
     layer.batchDraw();
   }
@@ -62,7 +81,7 @@ export class JsonTool {
         let newShapes: Konva.Node[] = [];
 
         if (tempNode.getClassName() === 'Layer') {
-             newShapes = (tempNode as Konva.Layer).getChildren().slice();
+             newShapes = (tempNode as Konva.Layer).getChildren();
         } else {
              newShapes = [tempNode]; 
         }
@@ -88,6 +107,31 @@ export class JsonTool {
     };
 
     reader.readAsText(file);
+  }
+
+  exportAsImage() {
+    const layer = this.shapeService.getMainLayer();
+    if (!layer) return;
+
+    this.shapeService.setKonvaShape(null);
+    this.shapeService.setSelectedShapes([]);
+
+    const systemNodes = layer.getChildren().filter(node => 
+      node.getClassName() === 'Transformer' || node.name() === 'selectionRectangle'
+    );
+
+    systemNodes.forEach(node => node.hide());
+
+    const dataURL = layer.toDataURL({ pixelRatio: 3 });
+
+    systemNodes.forEach(node => node.show());
+
+    const link = document.createElement('a');
+    link.download = `whiteboard-image-${new Date().toISOString().slice(0, 19).replace(/:/g, "-")}.png`;
+    link.href = dataURL;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
   }
 
   private rebindEvents(node: Konva.Node) {
