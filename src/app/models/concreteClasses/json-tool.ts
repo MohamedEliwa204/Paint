@@ -30,7 +30,6 @@ export class JsonTool {
     this.processImagesForExport(data);
 
     const json = JSON.stringify(data);
-
     const blob = new Blob([json], { type: 'application/json' });
     const filename = `whiteboard-${new Date().toISOString().slice(0, 19).replace(/:/g, "-")}.json`;
 
@@ -38,13 +37,16 @@ export class JsonTool {
         if ('showSaveFilePicker' in window) {
             const handle = await (window as any).showSaveFilePicker({
                 suggestedName: filename,
-                types: [{ description: 'JSON File', accept: { 'application/json': ['.json'] } }],
+                types: [{
+                    description: 'JSON Whiteboard File',
+                    accept: { 'application/json': ['.json'] },
+                }],
             });
             const writable = await handle.createWritable();
             await writable.write(blob);
             await writable.close();
         } else {
-            throw new Error("API not supported");
+            throw new Error("Not supported");
         }
     } catch (err) {
         if ((err as any).name !== 'AbortError') {
@@ -131,8 +133,7 @@ export class JsonTool {
     document.body.removeChild(link);
   }
 
-  private processImagesForExport(data: any) {
-  }
+  private processImagesForExport(data: any) {}
 
   private rebindEvents(node: Konva.Node) {
     if (node.name() === 'eraser') {

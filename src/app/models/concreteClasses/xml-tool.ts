@@ -39,7 +39,7 @@ export class XmlTool {
             await writable.write(blob);
             await writable.close();
         } else {
-            throw new Error("API not supported");
+            throw new Error("Not supported");
         }
     } catch (err) {
         if ((err as any).name !== 'AbortError') {
@@ -196,6 +196,11 @@ export class XmlTool {
         (node as Konva.Group).getChildren().forEach(child => {
              this.rebindEvents(child); 
         });
+        
+        this.shapeLogic.selectShape(node);
+        this.shapeLogic.onDrawingShape(node);
+        this.shapeLogic.onShapeDragEnd(node);
+        this.shapeLogic.onShapeTransformEnd(node);
     }
   }
 }
