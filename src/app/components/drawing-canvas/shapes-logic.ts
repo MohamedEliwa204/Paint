@@ -1,4 +1,3 @@
-import { Component, Inject, Injectable, signal } from "@angular/core";
 import { ShapeSelection } from "../../services/shape-selection";
 const styleAttributes = [
     'fill',
@@ -24,18 +23,44 @@ export class ShapesLogic {
     }
 
     selectShape(shape: any) {
-        shape.on("click", () => {
-            // Toggle selection
-            // Keep in mind that getSelectedShape returns the shape type name
-            // while getKonvaShape returns the actual Konva shape object
-            // also keep or remove the isDrawing check based on your requirements
-            // here we keep it to avoid changing selection while drawing
-            if (this.shapeService.getKonvaShape() === shape && !this.shapeService.getIsDrawing()) {
-                // this.shapeService.setSelectedShape(null);
-                this.shapeService.setKonvaShape(null);
-                console.log("Shape deselected");
-            } else if (!this.shapeService.getIsDrawing()) {
-                this.shapeService.setKonvaShape(shape);
+        shape.on("click", (e: any) => {
+            // Don't change selection while drawing
+            if (this.shapeService.getIsDrawing()) {
+                return;
+            }
+
+            const isCtrlPressed = e.evt && (e.evt.ctrlKey || e.evt.metaKey);
+            const currentSelection = this.shapeService.getSelectedShapes();
+
+            if (isCtrlPressed) {
+                // Ctrl+Click: toggle shape in multi-selection
+                const isAlreadySelected = currentSelection.includes(shape);
+
+                if (isAlreadySelected) {
+                    // Remove from selection
+                    const newSelection = currentSelection.filter((s: any) => s !== shape);
+                    this.shapeService.selectedShapes.set(newSelection);
+                    this.shapeService.setKonvaShape(newSelection.length > 0 ? newSelection[0] : null);
+                    console.log("Shape removed from selection");
+                } else {
+                    // Add to selection
+                    const newSelection = [...currentSelection, shape];
+                    this.shapeService.selectedShapes.set(newSelection);
+                    this.shapeService.setKonvaShape(shape);
+                    console.log("Shape added to selection");
+                }
+            } else {
+                // Regular click: single selection
+                if (this.shapeService.getKonvaShape() === shape && currentSelection.length === 1) {
+                    // Deselect if clicking same shape
+                    this.shapeService.clearSelection();
+                    console.log("Shape deselected");
+                } else {
+                    // Select only this shape
+                    this.shapeService.selectedShapes.set([shape]);
+                    this.shapeService.setKonvaShape(shape);
+                    console.log("Shape selected");
+                }
             }
         });
     }
