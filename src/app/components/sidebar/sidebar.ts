@@ -36,12 +36,12 @@ export class Sidebar {
   // Check if shape has specific properties
   hasWidth = computed(() => {
     const type = this.shapeType();
-    return ['Rect', 'rectangle', 'square'].includes(type);
+    return ['Rect', 'rectangle', 'square','image'].includes(type);
   });
 
   hasHeight = computed(() => {
     const type = this.shapeType();
-    return ['Rect', 'rectangle', 'square'].includes(type);
+    return ['Rect', 'rectangle', 'square','image'].includes(type);
   });
 
   hasRadius = computed(() => {
@@ -164,5 +164,10 @@ export class Sidebar {
     // we can check the array later for destroyed shapes and remove them (not recommended)
   }
 
+
+  isImage = computed(() => {
+    const type = this.shapeType();
+    return type === 'image' || type === 'Image';
+  });
 
 }

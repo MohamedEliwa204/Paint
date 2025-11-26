@@ -8,19 +8,23 @@ import { PolygonShape } from '../../models/concreteClasses/polygon-shape';
 import { LineShape } from '../../models/concreteClasses/line-shape';
 import { SquareShape } from '../../models/concreteClasses/square-shape';
 import { FreeLine } from '../../models/concreteClasses/free-line';
+import { ImageTool } from '../../models/concreteClasses/image-tool';
 import { ShapeStyles } from '../../models/dtos/shape.dto';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-
-
-
+import { MatMenuModule } from '@angular/material/menu';
+import { MatButtonModule } from '@angular/material/button';
+import { HttpClient } from '@angular/common/http';
+import { ShapesLogic } from '../../components/drawing-canvas/shapes-logic'; 
+import { JsonTool } from '../../models/concreteClasses/json-tool';
 @Component({
   selector: 'app-shapes-bar',
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, MatMenuModule, MatButtonModule],
   templateUrl: './shapes-bar.html',
   styleUrl: './shapes-bar.css',
 })
 export class ShapesBar {
+  storedJsonData: any; 
   private shapeService = inject(ShapeSelection);
   private currentTool: any = null;
   private disabeleTools: boolean = false;
@@ -28,6 +32,10 @@ export class ShapesBar {
   strokeWidths: number[] = [1, 2, 4, 6];
   opacities: number[] = [1, 0.75, 0.5, 0.25];
   // for Lines 
+  public shapesLogic = new ShapesLogic(this.shapeService);
+  public imageTool = new ImageTool(this.shapesLogic);
+  public jsonTool = new JsonTool(this.shapesLogic, this.shapeService);
+
   lineCaps: ('butt' | 'round' | 'square')[] = ['butt', 'round', 'square'];
   strokeDashArrays: ([number, number])[] = [[4, 2], [8, 4], [2, 6]];
   
@@ -57,7 +65,6 @@ export class ShapesBar {
   //       return null;
   //   }
 
-  // }
 
   onClick(shapeName: string) {
     if (this.currentTool === shapeName) {
@@ -90,4 +97,27 @@ export class ShapesBar {
     this.shapeStyles[attr] = value;
     this.shapeService.setCurrentStyles(this.shapeStyles);
   }
+
+
+  onNew() {
+    window.open(window.location.href, '_blank');
+  }
+  onExportJson() {
+    this.jsonTool.exportCanvas();
+  }
+
+  onImportJson(event: any) {
+    const file = event.target.files[0];
+    if (file) {
+      this.jsonTool.importCanvas(file);
+      event.target.value = '';
+    }
+  }
+
+onImageSelected(event: Event) {
+  const layer = this.shapeService.getMainLayer();
+  if (layer) {
+    this.imageTool.uploadImage(event, layer);
+  }
+}
 }

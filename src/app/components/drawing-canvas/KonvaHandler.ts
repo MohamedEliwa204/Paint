@@ -1,4 +1,4 @@
-import { Signal } from "@angular/core";
+import { Signal,effect } from "@angular/core";
 import Konva from "konva";
 import { MockShapeFactory } from "../Factories/MockShapeFactory";
 import { Shape } from "konva/lib/Shape";
@@ -18,16 +18,36 @@ export class KonvaHandler {
     private shapes: Konva.Shape[] = [];
 
     private shapeLogic: ShapesLogic;
+    private transformer: Konva.Transformer;
 
     constructor(containerId: string, width: number, height: number, shapeService: any) {
         this.shapeService = shapeService;
         this.stage = new Konva.Stage({ container: containerId, width: width, height: height });
         this.layer = new Konva.Layer();
         this.stage.add(this.layer);
+        this.transformer = new Konva.Transformer({
+            nodes: [], 
+            padding: 5, 
+            anchorStroke: 'red', 
+            anchorFill: 'white',
+        });
+        this.layer.add(this.transformer);
+
+        this.shapeService.setMainLayer(this.layer);
         this.shapeLogic = new ShapesLogic(shapeService);
         this.onMouseDown();
         this.onMouseMove();
         this.onMouseUp();
+    }
+
+    public updateSelection(selectedShape: any) {
+        if (selectedShape) {
+            this.transformer.nodes([selectedShape]);
+            this.transformer.moveToTop();
+        } else {
+            this.transformer.nodes([]);
+        }
+        this.layer.batchDraw();
     }
 
     get selectedShapeType() {

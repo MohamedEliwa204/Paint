@@ -7,6 +7,7 @@ import Konva from 'konva';
   providedIn: 'root',
 })
 export class ShapeSelection {
+  private mainLayer: Konva.Layer | null = null;
   selectedShape: WritableSignal<string | null> = signal<string | null>(null);
   isDrawing: WritableSignal<boolean> = signal<boolean>(false);
   selectedKonvaShape: WritableSignal<Konva.Shape | null> = signal<Konva.Shape | null>(null);
@@ -41,6 +42,12 @@ export class ShapeSelection {
 
   setKonvaShape(shape: Konva.Shape | null) {
     this.selectedKonvaShape.set(shape)
+  }
+  setMainLayer(layer: Konva.Layer) {
+    this.mainLayer = layer;
+  }
+  getMainLayer(): Konva.Layer | null {
+    return this.mainLayer;
   }
 
 }

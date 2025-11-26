@@ -1,5 +1,4 @@
-import { Component, inject, AfterViewInit, ElementRef } from '@angular/core';
-import { ShapeSelection } from '../../services/shape-selection';
+import { Component, inject, AfterViewInit, ElementRef, effect } from '@angular/core';import { ShapeSelection } from '../../services/shape-selection';
 import { NgIf } from '@angular/common';
 import Konva from 'konva';
 import { Line } from 'konva/lib/shapes/Line';
@@ -34,6 +33,16 @@ export class DrawingCanvas implements AfterViewInit {
 
   private mockFactory = new MockShapeFactory();
   private konvaHandler: KonvaHandler | null = null;
+
+
+  constructor() {
+    effect(() => {
+      const selectedShape = this.shapeService.getKonvaShape();
+      if (this.konvaHandler) {
+        this.konvaHandler.updateSelection(selectedShape);
+      }
+    });
+  }
 
 
   get selectedShape() {

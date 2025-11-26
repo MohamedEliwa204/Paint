@@ -1,4 +1,30 @@
 <main>
+ <button mat-button [matMenuTriggerFor]="fileMenu">File</button>
+
+  <mat-menu #fileMenu="matMenu" >
+    <button mat-menu-item (click)="onNew()" style="width: 100px;">New</button>
+    
+    <button mat-menu-item (click)="fileInput1.click()" style="width: 100px;">Import</button>
+
+    <button mat-menu-item (click)="onExportJson()" style="width: 100px;">Export</button>
+  </mat-menu>
+  <input
+    type="file"
+    #fileInput1
+    style="display: none"
+    (change)="onImportJson($event)"
+    accept=".json"
+  />
+  <input 
+    type="file" 
+    #fileInput 
+    style="display: none" 
+    (change)="onImageSelected($event)" 
+    accept="image/*"
+  >
+  <button (click)="fileInput.click()" style="width: 100px;">
+    Add Image
+  </button>
   <div>
     <button (click)="onClick('circle')" [class.selected]="isSelected('circle')" title="Circle">
       <svg width="28" height="28" viewBox="0 0 28 28">
@@ -154,4 +180,5 @@
       </select>
     </label>
   </div>
+
 </main>
